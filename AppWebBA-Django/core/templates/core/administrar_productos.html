@@ -1,0 +1,83 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+<link href="{% static 'core/css/forms.css' %}" rel="stylesheet">
+<link href="{% static 'core/css/administrar_productos.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="admin-productos-container">
+    <h1 class="text-center text-primary fw-bold mb-4">Administrar Productos</h1>
+
+    {% if form %}
+    <form method="POST" enctype="multipart/form-data" id="formulario" class="formulario-pequeno">
+        <div class="form-group">
+            {% csrf_token %}
+            {{ form.as_ul }}
+
+            {% if action == 'upd' %}
+            <script>
+                $(document).ready(function () {
+                    $('#id_patente').attr('readonly', true);
+                });
+            </script>
+            {% endif %}
+        </div>
+
+        <div class="form-botones mt-4 d-flex flex-wrap gap-2 mb-3">
+            <input type="submit" class="btn btn-primary" value="Guardar">
+            <a class="btn btn-success" href="{% url 'administrar_productos' 'ins' -1 %}">Nuevo</a>
+            {% if id != '-1' %}
+            <a class="btn btn-danger" href="{% url 'administrar_productos' 'del' id %}">Eliminar</a>
+            {% endif %}
+            <a class="btn btn-secondary" href="{% url 'home' %}">Inicio</a>
+        </div>
+
+        {% if mesg %}
+        <div id="form_message" class="alert alert-danger" role="alert">{{ mesg }}</div>
+        {% endif %}
+    </form>
+    {% endif %}
+
+    {% if list %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle text-center" id="tabla_datos">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Imagen</th>
+                    <th class="titulo_boton">Editar</th>
+                    <th class="titulo_boton">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in list %}
+                <tr>
+                    <td>{{ producto.idprod }}</td>
+                    <td>{{ producto.nomprod }}</td>
+                    <td>{{ producto.descprod }}</td>
+                    <td>${{ producto.precio }}</td>
+                    <td><img src="/media/{{ producto.imagen }}" class="mini_auto" alt="Producto"></td>
+                    <td>
+                        <a href="{% url 'administrar_productos' 'upd' producto.idprod %}" class="btn btn-outline-primary btn-sm">Editar</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'administrar_productos' 'del' producto.idprod %}" class="btn btn-outline-danger btn-sm">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="http://127.0.0.1:8000/admin" class="btn btn-outline-info btn-sm me-2">Panel Django Admin</a>
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm">Volver al Inicio</a>
+    </div>
+</div>
+{% endblock %}

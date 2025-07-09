@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="base_datosModelStoreContainer" CdmEntityContainer="base_datosEntities">
+    <EntitySetMapping Name="AnwoStockProducto">
+      <EntityTypeMapping TypeName="base_datosModel.AnwoStockProducto">
+        <MappingFragment StoreEntitySet="AnwoStockProducto">
+          <ScalarProperty Name="nroserieanwo" ColumnName="nroserieanwo" />
+          <ScalarProperty Name="nomprodanwo" ColumnName="nomprodanwo" />
+          <ScalarProperty Name="precioanwo" ColumnName="precioanwo" />
+          <ScalarProperty Name="reservado" ColumnName="reservado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="auth_group">
+      <EntityTypeMapping TypeName="base_datosModel.auth_group">
+        <MappingFragment StoreEntitySet="auth_group">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="auth_group_permissions">
+      <EntityTypeMapping TypeName="base_datosModel.auth_group_permissions">
+        <MappingFragment StoreEntitySet="auth_group_permissions">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="group_id" ColumnName="group_id" />
+          <ScalarProperty Name="permission_id" ColumnName="permission_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="auth_permission">
+      <EntityTypeMapping TypeName="base_datosModel.auth_permission">
+        <MappingFragment StoreEntitySet="auth_permission">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="content_type_id" ColumnName="content_type_id" />
+          <ScalarProperty Name="codename" ColumnName="codename" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="auth_user">
+      <EntityTypeMapping TypeName="base_datosModel.auth_user">
+        <MappingFragment StoreEntitySet="auth_user">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="last_login" ColumnName="last_login" />
+          <ScalarProperty Name="is_superuser" ColumnName="is_superuser" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="first_name" ColumnName="first_name" />
+          <ScalarProperty Name="last_name" ColumnName="last_name" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="is_staff" ColumnName="is_staff" />
+          <ScalarProperty Name="is_active" ColumnName="is_active" />
+          <ScalarProperty Name="date_joined" ColumnName="date_joined" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="auth_user_groups">
+      <EntityTypeMapping TypeName="base_datosModel.auth_user_groups">
+        <MappingFragment StoreEntitySet="auth_user_groups">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="group_id" ColumnName="group_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="auth_user_user_permissions">
+      <EntityTypeMapping TypeName="base_datosModel.auth_user_user_permissions">
+        <MappingFragment StoreEntitySet="auth_user_user_permissions">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="permission_id" ColumnName="permission_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="authtoken_token">
+      <EntityTypeMapping TypeName="base_datosModel.authtoken_token">
+        <MappingFragment StoreEntitySet="authtoken_token">
+          <ScalarProperty Name="key" ColumnName="key" />
+          <ScalarProperty Name="created" ColumnName="created" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="django_admin_log">
+      <EntityTypeMapping TypeName="base_datosModel.django_admin_log">
+        <MappingFragment StoreEntitySet="django_admin_log">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="action_time" ColumnName="action_time" />
+          <ScalarProperty Name="object_id" ColumnName="object_id" />
+          <ScalarProperty Name="object_repr" ColumnName="object_repr" />
+          <ScalarProperty Name="action_flag" ColumnName="action_flag" />
+          <ScalarProperty Name="change_message" ColumnName="change_message" />
+          <ScalarProperty Name="content_type_id" ColumnName="content_type_id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="django_content_type">
+      <EntityTypeMapping TypeName="base_datosModel.django_content_type">
+        <MappingFragment StoreEntitySet="django_content_type">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="app_label" ColumnName="app_label" />
+          <ScalarProperty Name="model" ColumnName="model" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="django_migrations">
+      <EntityTypeMapping TypeName="base_datosModel.django_migrations">
+        <MappingFragment StoreEntitySet="django_migrations">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="app" ColumnName="app" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="applied" ColumnName="applied" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="django_session">
+      <EntityTypeMapping TypeName="base_datosModel.django_session">
+        <MappingFragment StoreEntitySet="django_session">
+          <ScalarProperty Name="session_key" ColumnName="session_key" />
+          <ScalarProperty Name="session_data" ColumnName="session_data" />
+          <ScalarProperty Name="expire_date" ColumnName="expire_date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Factura">
+      <EntityTypeMapping TypeName="base_datosModel.Factura">
+        <MappingFragment StoreEntitySet="Factura">
+          <ScalarProperty Name="nrofac" ColumnName="nrofac" />
+          <ScalarProperty Name="fechafac" ColumnName="fechafac" />
+          <ScalarProperty Name="descfac" ColumnName="descfac" />
+          <ScalarProperty Name="monto" ColumnName="monto" />
+          <ScalarProperty Name="rutcli" ColumnName="rutcli" />
+          <ScalarProperty Name="idprod" ColumnName="idprod" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GuiaDespacho">
+      <EntityTypeMapping TypeName="base_datosModel.GuiaDespacho">
+        <MappingFragment StoreEntitySet="GuiaDespacho">
+          <ScalarProperty Name="nrogd" ColumnName="nrogd" />
+          <ScalarProperty Name="estadogd" ColumnName="estadogd" />
+          <ScalarProperty Name="nrofac" ColumnName="nrofac" />
+          <ScalarProperty Name="idprod" ColumnName="idprod" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PerfilUsuario">
+      <EntityTypeMapping TypeName="base_datosModel.PerfilUsuario">
+        <MappingFragment StoreEntitySet="PerfilUsuario">
+          <ScalarProperty Name="rut" ColumnName="rut" />
+          <ScalarProperty Name="tipousu" ColumnName="tipousu" />
+          <ScalarProperty Name="dirusu" ColumnName="dirusu" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Producto">
+      <EntityTypeMapping TypeName="base_datosModel.Producto">
+        <MappingFragment StoreEntitySet="Producto">
+          <ScalarProperty Name="idprod" ColumnName="idprod" />
+          <ScalarProperty Name="nomprod" ColumnName="nomprod" />
+          <ScalarProperty Name="descprod" ColumnName="descprod" />
+          <ScalarProperty Name="precio" ColumnName="precio" />
+          <ScalarProperty Name="imagen" ColumnName="imagen" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SolicitudServicio">
+      <EntityTypeMapping TypeName="base_datosModel.SolicitudServicio">
+        <MappingFragment StoreEntitySet="SolicitudServicio">
+          <ScalarProperty Name="nrosol" ColumnName="nrosol" />
+          <ScalarProperty Name="tiposol" ColumnName="tiposol" />
+          <ScalarProperty Name="fechavisita" ColumnName="fechavisita" />
+          <ScalarProperty Name="descsol" ColumnName="descsol" />
+          <ScalarProperty Name="estadosol" ColumnName="estadosol" />
+          <ScalarProperty Name="nrofac" ColumnName="nrofac" />
+          <ScalarProperty Name="ruttec" ColumnName="ruttec" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StockProducto">
+      <EntityTypeMapping TypeName="base_datosModel.StockProducto">
+        <MappingFragment StoreEntitySet="StockProducto">
+          <ScalarProperty Name="idstock" ColumnName="idstock" />
+          <ScalarProperty Name="idprod" ColumnName="idprod" />
+          <ScalarProperty Name="nrofac" ColumnName="nrofac" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

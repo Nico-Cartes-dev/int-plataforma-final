@@ -1,0 +1,106 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+    <title>Mis Compras - Aires Acondicionados Buenos Aires</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Mis Compras</h2>
+
+    {% if facturas %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nº Factura</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>descripcion</th>
+                        <th>Monto</th>
+                        <th>Nro GB</th>
+                        <th>Estado Guia</th>
+                        <th>Nro SS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for factura in facturas %}
+                        <tr>
+                            <td>{{ factura.nrofac }}</td>
+                            <td>{{ factura.rutcli }}</td>
+                            <td>{{ factura.fechafac }}</td>
+                            <td>{{ factura.descfac }}</td>
+                            <td>${{ factura.monto|floatformat:0 }}</td>
+                            <td>
+                                {% if factura.guiadespacho_set.all %}
+                                    {% for guia in factura.guiadespacho_set.all %}
+                                        {{ guia.nrogd }}
+                                    {% empty %}
+                                        -
+                                    {% endfor %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if factura.guiadespacho_set.all %}
+                                    {% for guia in factura.guiadespacho_set.all %}
+                                        {{ guia.estadogd }}
+                                    {% empty %}
+                                        -
+                                    {% endfor %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if factura.guiadespacho_set.all %}
+                                    {% for guia in factura.guiadespacho_set.all %}
+                                        {% with solicitudes=guia.nrofac.solicitudservicio_set.all %}
+                                            {% if solicitudes %}
+                                                {% for solicitud in solicitudes %}
+                                                    {{ solicitud.nrosol }}
+                                                {% empty %}
+                                                    -
+                                                {% endfor %}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% empty %}
+                                        -
+                                    {% endfor %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No tienes compras registradas.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block stylesheet %}
+<style>
+    .table {
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    
+    .table thead {
+        background-color: #092b57;
+        color: white;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0,0,0,.02);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ArrayOfProducto>
+    <Producto>
+        <idprod>1</idprod>
+        <nomprod>Aire Split 9000 BTU</nomprod>
+        <descprod>Frío/Calor</descprod>
+        <precio>259990</precio>
+        <imagen>imagen1.jpg</imagen>
+    </Producto>
+    <Producto>
+        <idprod>2</idprod>
+        <nomprod>Aire Split 12000 BTU</nomprod>
+        <descprod>Solo Frío</descprod>
+        <precio>289990</precio>
+        <imagen>imagen2.jpg</imagen>
+    </Producto>
+       <Producto>
+        <idprod>3</idprod>
+        <nomprod>Anwo VP</nomprod>
+        <descprod>9000 Virus Protect</descprod>
+        <precio>288990</precio>
+        <imagen>imagen3.jpg</imagen>
+    </Producto>
+       <Producto>
+        <idprod>4</idprod>
+        <nomprod>Anwo Portatil</nomprod>
+        <descprod>12000 BTUf/c</descprod>
+        <precio>131990</precio>
+        <imagen>imagen4.jpg</imagen>
+    </Producto>
+       <Producto>
+        <idprod>5</idprod>
+        <nomprod>GPORT-14</nomprod>
+        <descprod>Anwo 14000 btu</descprod>
+        <precio>399990</precio>
+        <imagen>imagen5.jpg</imagen>
+    </Producto>
+       <Producto>
+        <idprod>6</idprod>
+        <nomprod>Kendal 12000</nomprod>
+        <descprod>Climat 22-24 m2</descprod>
+        <precio>335990</precio>
+        <imagen>imagen6.jpg</imagen>
+    </Producto>
+       <Producto>
+        <idprod>7</idprod>
+        <nomprod>Kendal Wifi 4000</nomprod>
+        <descprod>Climat 32-34 m2</descprod>
+        <precio>335990</precio>
+        <imagen>imagen7.jpg</imagen>
+    </Producto>
+       <Producto>
+        <idprod>8</idprod>
+        <nomprod>Anwo 12000</nomprod>
+        <descprod>Climat 42-44 m2</descprod>
+        <precio>335990</precio>
+        <imagen>imagen8.jpg</imagen>
+    </Producto>
+    
+</ArrayOfProducto>

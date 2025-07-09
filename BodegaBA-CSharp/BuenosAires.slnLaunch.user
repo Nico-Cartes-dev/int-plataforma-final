@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Nuevo perfil",
+    "Projects": [
+      {
+        "Path": "BuenosAires.ServiceLayer\\BuenosAires.ServiceLayer.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "BuenosAires.BodegaBA\\BuenosAires.BodegaBA.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

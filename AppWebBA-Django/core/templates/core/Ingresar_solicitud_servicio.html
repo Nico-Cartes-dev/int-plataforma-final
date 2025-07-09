@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+    <title>Ingresar Solicitud de Servicio</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Ingresar una Solicitud de Servicio</h2>
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    {% if success %}
+        <div class="alert alert-success">¡Su Solicitud de Servicio ha sido generada con éxito!</div>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Precio del servicio</label>
+            <div>
+                <strong>$25.000</strong>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="tipo_solicitud" class="form-label">Tipo de solicitud</label>
+            <select name="tipo_solicitud" id="tipo_solicitud" class="form-select" required>
+                <option value="Mantención">Mantención</option>
+                <option value="Reparación">Reparación</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea name="descripcion" id="descripcion" class="form-control" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="fecha_visita" class="form-label">Fecha de la visita</label>
+            <input type="date" name="fecha_visita" id="fecha_visita" class="form-control" required>
+        </div>
+        {% comment %} <div class="mb-3">
+            <label for="hora_visita" class="form-label">Hora de la visita</label>
+            <input type="time" name="hora_visita" id="hora_visita" class="form-control" required>
+        </div> {% endcomment %}
+        <button type="submit" class="btn btn-primary">Pagar</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+    <title>Actualizar Perfil de Usuario</title>
+{% endblock %}
+
+{% block content %}
+<style>
+        .form-container {
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        animation: fade-slide-in 0.8s ease-out forwards;
+    }
+    
+    .perfil-form .form-group {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+    .perfil-form label {
+        min-width: 150px;
+        margin-bottom: 0;
+        font-weight: 500;
+    }
+    .perfil-form input,
+    .perfil-form select {
+        flex: 1;
+        max-width: 400px;
+    }
+</style>
+<div class="container mt-4">
+    <h2>Actualizar Perfil de Usuario</h2>
+    {% if mesg %}
+        <div class="alert alert-success">{{ mesg }}</div>
+    {% endif %}
+    <div class="form-container">
+        <form method="POST" class="perfil-form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Actualizar datos de perfil</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

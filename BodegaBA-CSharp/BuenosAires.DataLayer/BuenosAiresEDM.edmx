@@ -1,0 +1,1256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="base_datosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AnwoStockProducto">
+          <Key>
+            <PropertyRef Name="nroserieanwo" />
+          </Key>
+          <Property Name="nroserieanwo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="nomprodanwo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="precioanwo" Type="int" Nullable="false" />
+          <Property Name="reservado" Type="nvarchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="auth_group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="auth_group_permissions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="group_id" Type="int" Nullable="false" />
+          <Property Name="permission_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="auth_permission">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="content_type_id" Type="int" Nullable="false" />
+          <Property Name="codename" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="auth_user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="last_login" Type="datetimeoffset" Precision="7" />
+          <Property Name="is_superuser" Type="bit" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="first_name" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="last_name" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="254" Nullable="false" />
+          <Property Name="is_staff" Type="bit" Nullable="false" />
+          <Property Name="is_active" Type="bit" Nullable="false" />
+          <Property Name="date_joined" Type="datetimeoffset" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="auth_user_groups">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="group_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="auth_user_user_permissions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="permission_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="authtoken_token">
+          <Key>
+            <PropertyRef Name="key" />
+          </Key>
+          <Property Name="key" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="created" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="django_admin_log">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="action_time" Type="datetimeoffset" Precision="7" Nullable="false" />
+          <Property Name="object_id" Type="nvarchar(max)" />
+          <Property Name="object_repr" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="action_flag" Type="smallint" Nullable="false" />
+          <Property Name="change_message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="content_type_id" Type="int" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="django_content_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="app_label" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="model" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="django_migrations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="app" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="applied" Type="datetimeoffset" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="django_session">
+          <Key>
+            <PropertyRef Name="session_key" />
+          </Key>
+          <Property Name="session_key" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="session_data" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="expire_date" Type="datetimeoffset" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Factura">
+          <Key>
+            <PropertyRef Name="nrofac" />
+          </Key>
+          <Property Name="nrofac" Type="int" Nullable="false" />
+          <Property Name="fechafac" Type="date" Nullable="false" />
+          <Property Name="descfac" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="monto" Type="int" Nullable="false" />
+          <Property Name="rutcli" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="idprod" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GuiaDespacho">
+          <Key>
+            <PropertyRef Name="nrogd" />
+          </Key>
+          <Property Name="nrogd" Type="int" Nullable="false" />
+          <Property Name="estadogd" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="nrofac" Type="int" Nullable="false" />
+          <Property Name="idprod" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PerfilUsuario">
+          <Key>
+            <PropertyRef Name="rut" />
+          </Key>
+          <Property Name="rut" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="tipousu" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="dirusu" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="idprod" />
+          </Key>
+          <Property Name="idprod" Type="int" Nullable="false" />
+          <Property Name="nomprod" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="descprod" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="precio" Type="int" Nullable="false" />
+          <Property Name="imagen" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SolicitudServicio">
+          <Key>
+            <PropertyRef Name="nrosol" />
+          </Key>
+          <Property Name="nrosol" Type="int" Nullable="false" />
+          <Property Name="tiposol" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="fechavisita" Type="date" Nullable="false" />
+          <Property Name="descsol" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="estadosol" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="nrofac" Type="int" Nullable="false" />
+          <Property Name="ruttec" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StockProducto">
+          <Key>
+            <PropertyRef Name="idstock" />
+          </Key>
+          <Property Name="idstock" Type="int" Nullable="false" />
+          <Property Name="idprod" Type="int" Nullable="false" />
+          <Property Name="nrofac" Type="int" />
+        </EntityType>
+        <Association Name="auth_group_permissions_group_id_b120cbf9_fk_auth_group_id">
+          <End Role="auth_group" Type="Self.auth_group" Multiplicity="1" />
+          <End Role="auth_group_permissions" Type="Self.auth_group_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_group_permissions">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_group_permissions_permission_id_84c5c92e_fk_auth_permission_id">
+          <End Role="auth_permission" Type="Self.auth_permission" Multiplicity="1" />
+          <End Role="auth_group_permissions" Type="Self.auth_group_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_permission">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_group_permissions">
+              <PropertyRef Name="permission_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_permission_content_type_id_2f476e4b_fk_django_content_type_id">
+          <End Role="django_content_type" Type="Self.django_content_type" Multiplicity="1" />
+          <End Role="auth_permission" Type="Self.auth_permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="django_content_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_permission">
+              <PropertyRef Name="content_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_user_groups_group_id_97559544_fk_auth_group_id">
+          <End Role="auth_group" Type="Self.auth_group" Multiplicity="1" />
+          <End Role="auth_user_groups" Type="Self.auth_user_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_user_groups">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_user_groups_user_id_6a12ed8b_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="auth_user_groups" Type="Self.auth_user_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_user_groups">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_user_user_permissions_permission_id_1fbb5f2c_fk_auth_permission_id">
+          <End Role="auth_permission" Type="Self.auth_permission" Multiplicity="1" />
+          <End Role="auth_user_user_permissions" Type="Self.auth_user_user_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_permission">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_user_user_permissions">
+              <PropertyRef Name="permission_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="auth_user_user_permissions" Type="Self.auth_user_user_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_user_user_permissions">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="authtoken_token_user_id_35299eff_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="authtoken_token" Type="Self.authtoken_token" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="authtoken_token">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="django_admin_log_content_type_id_c4bce8eb_fk_django_content_type_id">
+          <End Role="django_content_type" Type="Self.django_content_type" Multiplicity="0..1" />
+          <End Role="django_admin_log" Type="Self.django_admin_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="django_content_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="django_admin_log">
+              <PropertyRef Name="content_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="django_admin_log_user_id_c564eba6_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="django_admin_log" Type="Self.django_admin_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="django_admin_log">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Factura_idprod_2d2bdf71_fk_Producto_idprod">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="Factura" Type="Self.Factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idprod" />
+            </Principal>
+            <Dependent Role="Factura">
+              <PropertyRef Name="idprod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Factura_rutcli_b1520fa1_fk_PerfilUsuario_rut">
+          <End Role="PerfilUsuario" Type="Self.PerfilUsuario" Multiplicity="1" />
+          <End Role="Factura" Type="Self.Factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PerfilUsuario">
+              <PropertyRef Name="rut" />
+            </Principal>
+            <Dependent Role="Factura">
+              <PropertyRef Name="rutcli" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GuiaDespacho_idprod_2f99a153_fk_Producto_idprod">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="GuiaDespacho" Type="Self.GuiaDespacho" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idprod" />
+            </Principal>
+            <Dependent Role="GuiaDespacho">
+              <PropertyRef Name="idprod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GuiaDespacho_nrofac_c0530d77_fk_Factura_nrofac">
+          <End Role="Factura" Type="Self.Factura" Multiplicity="1" />
+          <End Role="GuiaDespacho" Type="Self.GuiaDespacho" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factura">
+              <PropertyRef Name="nrofac" />
+            </Principal>
+            <Dependent Role="GuiaDespacho">
+              <PropertyRef Name="nrofac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PerfilUsuario_user_id_ec66e99e_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="PerfilUsuario" Type="Self.PerfilUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PerfilUsuario">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SolicitudServicio_nrofac_80536535_fk_Factura_nrofac">
+          <End Role="Factura" Type="Self.Factura" Multiplicity="1" />
+          <End Role="SolicitudServicio" Type="Self.SolicitudServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factura">
+              <PropertyRef Name="nrofac" />
+            </Principal>
+            <Dependent Role="SolicitudServicio">
+              <PropertyRef Name="nrofac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SolicitudServicio_ruttec_ac9a6f64_fk_PerfilUsuario_rut">
+          <End Role="PerfilUsuario" Type="Self.PerfilUsuario" Multiplicity="1" />
+          <End Role="SolicitudServicio" Type="Self.SolicitudServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PerfilUsuario">
+              <PropertyRef Name="rut" />
+            </Principal>
+            <Dependent Role="SolicitudServicio">
+              <PropertyRef Name="ruttec" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="StockProducto_idprod_dc3254a8_fk_Producto_idprod">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="StockProducto" Type="Self.StockProducto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idprod" />
+            </Principal>
+            <Dependent Role="StockProducto">
+              <PropertyRef Name="idprod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="StockProducto_nrofac_7c0b3b70_fk_Factura_nrofac">
+          <End Role="Factura" Type="Self.Factura" Multiplicity="0..1" />
+          <End Role="StockProducto" Type="Self.StockProducto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factura">
+              <PropertyRef Name="nrofac" />
+            </Principal>
+            <Dependent Role="StockProducto">
+              <PropertyRef Name="nrofac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="base_datosModelStoreContainer">
+          <EntitySet Name="AnwoStockProducto" EntityType="Self.AnwoStockProducto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="auth_group" EntityType="Self.auth_group" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="auth_group_permissions" EntityType="Self.auth_group_permissions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="auth_permission" EntityType="Self.auth_permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="auth_user" EntityType="Self.auth_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="auth_user_groups" EntityType="Self.auth_user_groups" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="auth_user_user_permissions" EntityType="Self.auth_user_user_permissions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="authtoken_token" EntityType="Self.authtoken_token" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="django_admin_log" EntityType="Self.django_admin_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="django_content_type" EntityType="Self.django_content_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="django_migrations" EntityType="Self.django_migrations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="django_session" EntityType="Self.django_session" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Factura" EntityType="Self.Factura" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GuiaDespacho" EntityType="Self.GuiaDespacho" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PerfilUsuario" EntityType="Self.PerfilUsuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SolicitudServicio" EntityType="Self.SolicitudServicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StockProducto" EntityType="Self.StockProducto" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="auth_group_permissions_group_id_b120cbf9_fk_auth_group_id" Association="Self.auth_group_permissions_group_id_b120cbf9_fk_auth_group_id">
+            <End Role="auth_group" EntitySet="auth_group" />
+            <End Role="auth_group_permissions" EntitySet="auth_group_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="auth_group_permissions_permission_id_84c5c92e_fk_auth_permission_id" Association="Self.auth_group_permissions_permission_id_84c5c92e_fk_auth_permission_id">
+            <End Role="auth_permission" EntitySet="auth_permission" />
+            <End Role="auth_group_permissions" EntitySet="auth_group_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="auth_permission_content_type_id_2f476e4b_fk_django_content_type_id" Association="Self.auth_permission_content_type_id_2f476e4b_fk_django_content_type_id">
+            <End Role="django_content_type" EntitySet="django_content_type" />
+            <End Role="auth_permission" EntitySet="auth_permission" />
+          </AssociationSet>
+          <AssociationSet Name="auth_user_groups_group_id_97559544_fk_auth_group_id" Association="Self.auth_user_groups_group_id_97559544_fk_auth_group_id">
+            <End Role="auth_group" EntitySet="auth_group" />
+            <End Role="auth_user_groups" EntitySet="auth_user_groups" />
+          </AssociationSet>
+          <AssociationSet Name="auth_user_groups_user_id_6a12ed8b_fk_auth_user_id" Association="Self.auth_user_groups_user_id_6a12ed8b_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="auth_user_groups" EntitySet="auth_user_groups" />
+          </AssociationSet>
+          <AssociationSet Name="auth_user_user_permissions_permission_id_1fbb5f2c_fk_auth_permission_id" Association="Self.auth_user_user_permissions_permission_id_1fbb5f2c_fk_auth_permission_id">
+            <End Role="auth_permission" EntitySet="auth_permission" />
+            <End Role="auth_user_user_permissions" EntitySet="auth_user_user_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id" Association="Self.auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="auth_user_user_permissions" EntitySet="auth_user_user_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="authtoken_token_user_id_35299eff_fk_auth_user_id" Association="Self.authtoken_token_user_id_35299eff_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="authtoken_token" EntitySet="authtoken_token" />
+          </AssociationSet>
+          <AssociationSet Name="django_admin_log_content_type_id_c4bce8eb_fk_django_content_type_id" Association="Self.django_admin_log_content_type_id_c4bce8eb_fk_django_content_type_id">
+            <End Role="django_content_type" EntitySet="django_content_type" />
+            <End Role="django_admin_log" EntitySet="django_admin_log" />
+          </AssociationSet>
+          <AssociationSet Name="django_admin_log_user_id_c564eba6_fk_auth_user_id" Association="Self.django_admin_log_user_id_c564eba6_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="django_admin_log" EntitySet="django_admin_log" />
+          </AssociationSet>
+          <AssociationSet Name="Factura_idprod_2d2bdf71_fk_Producto_idprod" Association="Self.Factura_idprod_2d2bdf71_fk_Producto_idprod">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Factura" EntitySet="Factura" />
+          </AssociationSet>
+          <AssociationSet Name="Factura_rutcli_b1520fa1_fk_PerfilUsuario_rut" Association="Self.Factura_rutcli_b1520fa1_fk_PerfilUsuario_rut">
+            <End Role="PerfilUsuario" EntitySet="PerfilUsuario" />
+            <End Role="Factura" EntitySet="Factura" />
+          </AssociationSet>
+          <AssociationSet Name="GuiaDespacho_idprod_2f99a153_fk_Producto_idprod" Association="Self.GuiaDespacho_idprod_2f99a153_fk_Producto_idprod">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="GuiaDespacho" EntitySet="GuiaDespacho" />
+          </AssociationSet>
+          <AssociationSet Name="GuiaDespacho_nrofac_c0530d77_fk_Factura_nrofac" Association="Self.GuiaDespacho_nrofac_c0530d77_fk_Factura_nrofac">
+            <End Role="Factura" EntitySet="Factura" />
+            <End Role="GuiaDespacho" EntitySet="GuiaDespacho" />
+          </AssociationSet>
+          <AssociationSet Name="PerfilUsuario_user_id_ec66e99e_fk_auth_user_id" Association="Self.PerfilUsuario_user_id_ec66e99e_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="PerfilUsuario" EntitySet="PerfilUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="SolicitudServicio_nrofac_80536535_fk_Factura_nrofac" Association="Self.SolicitudServicio_nrofac_80536535_fk_Factura_nrofac">
+            <End Role="Factura" EntitySet="Factura" />
+            <End Role="SolicitudServicio" EntitySet="SolicitudServicio" />
+          </AssociationSet>
+          <AssociationSet Name="SolicitudServicio_ruttec_ac9a6f64_fk_PerfilUsuario_rut" Association="Self.SolicitudServicio_ruttec_ac9a6f64_fk_PerfilUsuario_rut">
+            <End Role="PerfilUsuario" EntitySet="PerfilUsuario" />
+            <End Role="SolicitudServicio" EntitySet="SolicitudServicio" />
+          </AssociationSet>
+          <AssociationSet Name="StockProducto_idprod_dc3254a8_fk_Producto_idprod" Association="Self.StockProducto_idprod_dc3254a8_fk_Producto_idprod">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="StockProducto" EntitySet="StockProducto" />
+          </AssociationSet>
+          <AssociationSet Name="StockProducto_nrofac_7c0b3b70_fk_Factura_nrofac" Association="Self.StockProducto_nrofac_7c0b3b70_fk_Factura_nrofac">
+            <End Role="Factura" EntitySet="Factura" />
+            <End Role="StockProducto" EntitySet="StockProducto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="base_datosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AnwoStockProducto">
+          <Key>
+            <PropertyRef Name="nroserieanwo" />
+          </Key>
+          <Property Name="nroserieanwo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="nomprodanwo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="precioanwo" Type="Int32" Nullable="false" />
+          <Property Name="reservado" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="auth_group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="auth_group_permissions" Relationship="Self.auth_group_permissions_group_id_b120cbf9_fk_auth_group_id" FromRole="auth_group" ToRole="auth_group_permissions" />
+          <NavigationProperty Name="auth_user_groups" Relationship="Self.auth_user_groups_group_id_97559544_fk_auth_group_id" FromRole="auth_group" ToRole="auth_user_groups" />
+        </EntityType>
+        <EntityType Name="auth_group_permissions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="group_id" Type="Int32" Nullable="false" />
+          <Property Name="permission_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="auth_group" Relationship="Self.auth_group_permissions_group_id_b120cbf9_fk_auth_group_id" FromRole="auth_group_permissions" ToRole="auth_group" />
+          <NavigationProperty Name="auth_permission" Relationship="Self.auth_group_permissions_permission_id_84c5c92e_fk_auth_permission_id" FromRole="auth_group_permissions" ToRole="auth_permission" />
+        </EntityType>
+        <EntityType Name="auth_permission">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="content_type_id" Type="Int32" Nullable="false" />
+          <Property Name="codename" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="auth_group_permissions" Relationship="Self.auth_group_permissions_permission_id_84c5c92e_fk_auth_permission_id" FromRole="auth_permission" ToRole="auth_group_permissions" />
+          <NavigationProperty Name="django_content_type" Relationship="Self.auth_permission_content_type_id_2f476e4b_fk_django_content_type_id" FromRole="auth_permission" ToRole="django_content_type" />
+          <NavigationProperty Name="auth_user_user_permissions" Relationship="Self.auth_user_user_permissions_permission_id_1fbb5f2c_fk_auth_permission_id" FromRole="auth_permission" ToRole="auth_user_user_permissions" />
+        </EntityType>
+        <EntityType Name="auth_user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="password" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="last_login" Type="DateTimeOffset" Precision="7" />
+          <Property Name="is_superuser" Type="Boolean" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="first_name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="254" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="is_staff" Type="Boolean" Nullable="false" />
+          <Property Name="is_active" Type="Boolean" Nullable="false" />
+          <Property Name="date_joined" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <NavigationProperty Name="auth_user_groups" Relationship="Self.auth_user_groups_user_id_6a12ed8b_fk_auth_user_id" FromRole="auth_user" ToRole="auth_user_groups" />
+          <NavigationProperty Name="auth_user_user_permissions" Relationship="Self.auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id" FromRole="auth_user" ToRole="auth_user_user_permissions" />
+          <NavigationProperty Name="authtoken_token" Relationship="Self.authtoken_token_user_id_35299eff_fk_auth_user_id" FromRole="auth_user" ToRole="authtoken_token" />
+          <NavigationProperty Name="django_admin_log" Relationship="Self.django_admin_log_user_id_c564eba6_fk_auth_user_id" FromRole="auth_user" ToRole="django_admin_log" />
+          <NavigationProperty Name="PerfilUsuario" Relationship="Self.PerfilUsuario_user_id_ec66e99e_fk_auth_user_id" FromRole="auth_user" ToRole="PerfilUsuario" />
+        </EntityType>
+        <EntityType Name="auth_user_groups">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="group_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="auth_group" Relationship="Self.auth_user_groups_group_id_97559544_fk_auth_group_id" FromRole="auth_user_groups" ToRole="auth_group" />
+          <NavigationProperty Name="auth_user" Relationship="Self.auth_user_groups_user_id_6a12ed8b_fk_auth_user_id" FromRole="auth_user_groups" ToRole="auth_user" />
+        </EntityType>
+        <EntityType Name="auth_user_user_permissions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="permission_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="auth_permission" Relationship="Self.auth_user_user_permissions_permission_id_1fbb5f2c_fk_auth_permission_id" FromRole="auth_user_user_permissions" ToRole="auth_permission" />
+          <NavigationProperty Name="auth_user" Relationship="Self.auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id" FromRole="auth_user_user_permissions" ToRole="auth_user" />
+        </EntityType>
+        <EntityType Name="authtoken_token">
+          <Key>
+            <PropertyRef Name="key" />
+          </Key>
+          <Property Name="key" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="auth_user" Relationship="Self.authtoken_token_user_id_35299eff_fk_auth_user_id" FromRole="authtoken_token" ToRole="auth_user" />
+        </EntityType>
+        <EntityType Name="django_admin_log">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="action_time" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="object_id" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="object_repr" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="action_flag" Type="Int16" Nullable="false" />
+          <Property Name="change_message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="content_type_id" Type="Int32" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="auth_user" Relationship="Self.django_admin_log_user_id_c564eba6_fk_auth_user_id" FromRole="django_admin_log" ToRole="auth_user" />
+          <NavigationProperty Name="django_content_type" Relationship="Self.django_admin_log_content_type_id_c4bce8eb_fk_django_content_type_id" FromRole="django_admin_log" ToRole="django_content_type" />
+        </EntityType>
+        <EntityType Name="django_content_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="app_label" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="model" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="auth_permission" Relationship="Self.auth_permission_content_type_id_2f476e4b_fk_django_content_type_id" FromRole="django_content_type" ToRole="auth_permission" />
+          <NavigationProperty Name="django_admin_log" Relationship="Self.django_admin_log_content_type_id_c4bce8eb_fk_django_content_type_id" FromRole="django_content_type" ToRole="django_admin_log" />
+        </EntityType>
+        <EntityType Name="django_migrations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="app" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="applied" Type="DateTimeOffset" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="django_session">
+          <Key>
+            <PropertyRef Name="session_key" />
+          </Key>
+          <Property Name="session_key" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="session_data" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="expire_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="Factura">
+          <Key>
+            <PropertyRef Name="nrofac" />
+          </Key>
+          <Property Name="nrofac" Type="Int32" Nullable="false" />
+          <Property Name="fechafac" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="descfac" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="monto" Type="Int32" Nullable="false" />
+          <Property Name="rutcli" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="idprod" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Producto" Relationship="Self.Factura_idprod_2d2bdf71_fk_Producto_idprod" FromRole="Factura" ToRole="Producto" />
+          <NavigationProperty Name="PerfilUsuario" Relationship="Self.Factura_rutcli_b1520fa1_fk_PerfilUsuario_rut" FromRole="Factura" ToRole="PerfilUsuario" />
+          <NavigationProperty Name="GuiaDespacho" Relationship="Self.GuiaDespacho_nrofac_c0530d77_fk_Factura_nrofac" FromRole="Factura" ToRole="GuiaDespacho" />
+          <NavigationProperty Name="SolicitudServicio" Relationship="Self.SolicitudServicio_nrofac_80536535_fk_Factura_nrofac" FromRole="Factura" ToRole="SolicitudServicio" />
+          <NavigationProperty Name="StockProducto" Relationship="Self.StockProducto_nrofac_7c0b3b70_fk_Factura_nrofac" FromRole="Factura" ToRole="StockProducto" />
+        </EntityType>
+        <EntityType Name="GuiaDespacho">
+          <Key>
+            <PropertyRef Name="nrogd" />
+          </Key>
+          <Property Name="nrogd" Type="Int32" Nullable="false" />
+          <Property Name="estadogd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="nrofac" Type="Int32" Nullable="false" />
+          <Property Name="idprod" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Factura" Relationship="Self.GuiaDespacho_nrofac_c0530d77_fk_Factura_nrofac" FromRole="GuiaDespacho" ToRole="Factura" />
+          <NavigationProperty Name="Producto" Relationship="Self.GuiaDespacho_idprod_2f99a153_fk_Producto_idprod" FromRole="GuiaDespacho" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="PerfilUsuario">
+          <Key>
+            <PropertyRef Name="rut" />
+          </Key>
+          <Property Name="rut" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="tipousu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="dirusu" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="auth_user" Relationship="Self.PerfilUsuario_user_id_ec66e99e_fk_auth_user_id" FromRole="PerfilUsuario" ToRole="auth_user" />
+          <NavigationProperty Name="Factura" Relationship="Self.Factura_rutcli_b1520fa1_fk_PerfilUsuario_rut" FromRole="PerfilUsuario" ToRole="Factura" />
+          <NavigationProperty Name="SolicitudServicio" Relationship="Self.SolicitudServicio_ruttec_ac9a6f64_fk_PerfilUsuario_rut" FromRole="PerfilUsuario" ToRole="SolicitudServicio" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="idprod" />
+          </Key>
+          <Property Name="idprod" Type="Int32" Nullable="false" />
+          <Property Name="nomprod" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="descprod" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="precio" Type="Int32" Nullable="false" />
+          <Property Name="imagen" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Factura" Relationship="Self.Factura_idprod_2d2bdf71_fk_Producto_idprod" FromRole="Producto" ToRole="Factura" />
+          <NavigationProperty Name="GuiaDespacho" Relationship="Self.GuiaDespacho_idprod_2f99a153_fk_Producto_idprod" FromRole="Producto" ToRole="GuiaDespacho" />
+          <NavigationProperty Name="StockProducto" Relationship="Self.StockProducto_idprod_dc3254a8_fk_Producto_idprod" FromRole="Producto" ToRole="StockProducto" />
+        </EntityType>
+        <EntityType Name="SolicitudServicio">
+          <Key>
+            <PropertyRef Name="nrosol" />
+          </Key>
+          <Property Name="nrosol" Type="Int32" Nullable="false" />
+          <Property Name="tiposol" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fechavisita" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="descsol" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="estadosol" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="nrofac" Type="Int32" Nullable="false" />
+          <Property Name="ruttec" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Factura" Relationship="Self.SolicitudServicio_nrofac_80536535_fk_Factura_nrofac" FromRole="SolicitudServicio" ToRole="Factura" />
+          <NavigationProperty Name="PerfilUsuario" Relationship="Self.SolicitudServicio_ruttec_ac9a6f64_fk_PerfilUsuario_rut" FromRole="SolicitudServicio" ToRole="PerfilUsuario" />
+        </EntityType>
+        <EntityType Name="StockProducto">
+          <Key>
+            <PropertyRef Name="idstock" />
+          </Key>
+          <Property Name="idstock" Type="Int32" Nullable="false" />
+          <Property Name="idprod" Type="Int32" Nullable="false" />
+          <Property Name="nrofac" Type="Int32" />
+          <NavigationProperty Name="Factura" Relationship="Self.StockProducto_nrofac_7c0b3b70_fk_Factura_nrofac" FromRole="StockProducto" ToRole="Factura" />
+          <NavigationProperty Name="Producto" Relationship="Self.StockProducto_idprod_dc3254a8_fk_Producto_idprod" FromRole="StockProducto" ToRole="Producto" />
+        </EntityType>
+        <Association Name="auth_group_permissions_group_id_b120cbf9_fk_auth_group_id">
+          <End Role="auth_group" Type="Self.auth_group" Multiplicity="1" />
+          <End Role="auth_group_permissions" Type="Self.auth_group_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_group_permissions">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_user_groups_group_id_97559544_fk_auth_group_id">
+          <End Role="auth_group" Type="Self.auth_group" Multiplicity="1" />
+          <End Role="auth_user_groups" Type="Self.auth_user_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_user_groups">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_group_permissions_permission_id_84c5c92e_fk_auth_permission_id">
+          <End Role="auth_permission" Type="Self.auth_permission" Multiplicity="1" />
+          <End Role="auth_group_permissions" Type="Self.auth_group_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_permission">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_group_permissions">
+              <PropertyRef Name="permission_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_permission_content_type_id_2f476e4b_fk_django_content_type_id">
+          <End Role="django_content_type" Type="Self.django_content_type" Multiplicity="1" />
+          <End Role="auth_permission" Type="Self.auth_permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="django_content_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_permission">
+              <PropertyRef Name="content_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_user_user_permissions_permission_id_1fbb5f2c_fk_auth_permission_id">
+          <End Role="auth_permission" Type="Self.auth_permission" Multiplicity="1" />
+          <End Role="auth_user_user_permissions" Type="Self.auth_user_user_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_permission">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_user_user_permissions">
+              <PropertyRef Name="permission_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_user_groups_user_id_6a12ed8b_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="auth_user_groups" Type="Self.auth_user_groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_user_groups">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="auth_user_user_permissions" Type="Self.auth_user_user_permissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="auth_user_user_permissions">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="authtoken_token_user_id_35299eff_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="authtoken_token" Type="Self.authtoken_token" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="authtoken_token">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="django_admin_log_user_id_c564eba6_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="django_admin_log" Type="Self.django_admin_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="django_admin_log">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PerfilUsuario_user_id_ec66e99e_fk_auth_user_id">
+          <End Role="auth_user" Type="Self.auth_user" Multiplicity="1" />
+          <End Role="PerfilUsuario" Type="Self.PerfilUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PerfilUsuario">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="django_admin_log_content_type_id_c4bce8eb_fk_django_content_type_id">
+          <End Role="django_content_type" Type="Self.django_content_type" Multiplicity="0..1" />
+          <End Role="django_admin_log" Type="Self.django_admin_log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="django_content_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="django_admin_log">
+              <PropertyRef Name="content_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Factura_idprod_2d2bdf71_fk_Producto_idprod">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="Factura" Type="Self.Factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idprod" />
+            </Principal>
+            <Dependent Role="Factura">
+              <PropertyRef Name="idprod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Factura_rutcli_b1520fa1_fk_PerfilUsuario_rut">
+          <End Role="PerfilUsuario" Type="Self.PerfilUsuario" Multiplicity="1" />
+          <End Role="Factura" Type="Self.Factura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PerfilUsuario">
+              <PropertyRef Name="rut" />
+            </Principal>
+            <Dependent Role="Factura">
+              <PropertyRef Name="rutcli" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GuiaDespacho_nrofac_c0530d77_fk_Factura_nrofac">
+          <End Role="Factura" Type="Self.Factura" Multiplicity="1" />
+          <End Role="GuiaDespacho" Type="Self.GuiaDespacho" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factura">
+              <PropertyRef Name="nrofac" />
+            </Principal>
+            <Dependent Role="GuiaDespacho">
+              <PropertyRef Name="nrofac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SolicitudServicio_nrofac_80536535_fk_Factura_nrofac">
+          <End Role="Factura" Type="Self.Factura" Multiplicity="1" />
+          <End Role="SolicitudServicio" Type="Self.SolicitudServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factura">
+              <PropertyRef Name="nrofac" />
+            </Principal>
+            <Dependent Role="SolicitudServicio">
+              <PropertyRef Name="nrofac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="StockProducto_nrofac_7c0b3b70_fk_Factura_nrofac">
+          <End Role="Factura" Type="Self.Factura" Multiplicity="0..1" />
+          <End Role="StockProducto" Type="Self.StockProducto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factura">
+              <PropertyRef Name="nrofac" />
+            </Principal>
+            <Dependent Role="StockProducto">
+              <PropertyRef Name="nrofac" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GuiaDespacho_idprod_2f99a153_fk_Producto_idprod">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="GuiaDespacho" Type="Self.GuiaDespacho" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idprod" />
+            </Principal>
+            <Dependent Role="GuiaDespacho">
+              <PropertyRef Name="idprod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SolicitudServicio_ruttec_ac9a6f64_fk_PerfilUsuario_rut">
+          <End Role="PerfilUsuario" Type="Self.PerfilUsuario" Multiplicity="1" />
+          <End Role="SolicitudServicio" Type="Self.SolicitudServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PerfilUsuario">
+              <PropertyRef Name="rut" />
+            </Principal>
+            <Dependent Role="SolicitudServicio">
+              <PropertyRef Name="ruttec" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="StockProducto_idprod_dc3254a8_fk_Producto_idprod">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="StockProducto" Type="Self.StockProducto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idprod" />
+            </Principal>
+            <Dependent Role="StockProducto">
+              <PropertyRef Name="idprod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="base_datosEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AnwoStockProducto" EntityType="Self.AnwoStockProducto" />
+          <EntitySet Name="auth_group" EntityType="Self.auth_group" />
+          <EntitySet Name="auth_group_permissions" EntityType="Self.auth_group_permissions" />
+          <EntitySet Name="auth_permission" EntityType="Self.auth_permission" />
+          <EntitySet Name="auth_user" EntityType="Self.auth_user" />
+          <EntitySet Name="auth_user_groups" EntityType="Self.auth_user_groups" />
+          <EntitySet Name="auth_user_user_permissions" EntityType="Self.auth_user_user_permissions" />
+          <EntitySet Name="authtoken_token" EntityType="Self.authtoken_token" />
+          <EntitySet Name="django_admin_log" EntityType="Self.django_admin_log" />
+          <EntitySet Name="django_content_type" EntityType="Self.django_content_type" />
+          <EntitySet Name="django_migrations" EntityType="Self.django_migrations" />
+          <EntitySet Name="django_session" EntityType="Self.django_session" />
+          <EntitySet Name="Factura" EntityType="Self.Factura" />
+          <EntitySet Name="GuiaDespacho" EntityType="Self.GuiaDespacho" />
+          <EntitySet Name="PerfilUsuario" EntityType="Self.PerfilUsuario" />
+          <EntitySet Name="Producto" EntityType="Self.Producto" />
+          <EntitySet Name="SolicitudServicio" EntityType="Self.SolicitudServicio" />
+          <EntitySet Name="StockProducto" EntityType="Self.StockProducto" />
+          <AssociationSet Name="auth_group_permissions_group_id_b120cbf9_fk_auth_group_id" Association="Self.auth_group_permissions_group_id_b120cbf9_fk_auth_group_id">
+            <End Role="auth_group" EntitySet="auth_group" />
+            <End Role="auth_group_permissions" EntitySet="auth_group_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="auth_user_groups_group_id_97559544_fk_auth_group_id" Association="Self.auth_user_groups_group_id_97559544_fk_auth_group_id">
+            <End Role="auth_group" EntitySet="auth_group" />
+            <End Role="auth_user_groups" EntitySet="auth_user_groups" />
+          </AssociationSet>
+          <AssociationSet Name="auth_group_permissions_permission_id_84c5c92e_fk_auth_permission_id" Association="Self.auth_group_permissions_permission_id_84c5c92e_fk_auth_permission_id">
+            <End Role="auth_permission" EntitySet="auth_permission" />
+            <End Role="auth_group_permissions" EntitySet="auth_group_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="auth_permission_content_type_id_2f476e4b_fk_django_content_type_id" Association="Self.auth_permission_content_type_id_2f476e4b_fk_django_content_type_id">
+            <End Role="django_content_type" EntitySet="django_content_type" />
+            <End Role="auth_permission" EntitySet="auth_permission" />
+          </AssociationSet>
+          <AssociationSet Name="auth_user_user_permissions_permission_id_1fbb5f2c_fk_auth_permission_id" Association="Self.auth_user_user_permissions_permission_id_1fbb5f2c_fk_auth_permission_id">
+            <End Role="auth_permission" EntitySet="auth_permission" />
+            <End Role="auth_user_user_permissions" EntitySet="auth_user_user_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="auth_user_groups_user_id_6a12ed8b_fk_auth_user_id" Association="Self.auth_user_groups_user_id_6a12ed8b_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="auth_user_groups" EntitySet="auth_user_groups" />
+          </AssociationSet>
+          <AssociationSet Name="auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id" Association="Self.auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="auth_user_user_permissions" EntitySet="auth_user_user_permissions" />
+          </AssociationSet>
+          <AssociationSet Name="authtoken_token_user_id_35299eff_fk_auth_user_id" Association="Self.authtoken_token_user_id_35299eff_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="authtoken_token" EntitySet="authtoken_token" />
+          </AssociationSet>
+          <AssociationSet Name="django_admin_log_user_id_c564eba6_fk_auth_user_id" Association="Self.django_admin_log_user_id_c564eba6_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="django_admin_log" EntitySet="django_admin_log" />
+          </AssociationSet>
+          <AssociationSet Name="PerfilUsuario_user_id_ec66e99e_fk_auth_user_id" Association="Self.PerfilUsuario_user_id_ec66e99e_fk_auth_user_id">
+            <End Role="auth_user" EntitySet="auth_user" />
+            <End Role="PerfilUsuario" EntitySet="PerfilUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="django_admin_log_content_type_id_c4bce8eb_fk_django_content_type_id" Association="Self.django_admin_log_content_type_id_c4bce8eb_fk_django_content_type_id">
+            <End Role="django_content_type" EntitySet="django_content_type" />
+            <End Role="django_admin_log" EntitySet="django_admin_log" />
+          </AssociationSet>
+          <AssociationSet Name="Factura_idprod_2d2bdf71_fk_Producto_idprod" Association="Self.Factura_idprod_2d2bdf71_fk_Producto_idprod">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Factura" EntitySet="Factura" />
+          </AssociationSet>
+          <AssociationSet Name="Factura_rutcli_b1520fa1_fk_PerfilUsuario_rut" Association="Self.Factura_rutcli_b1520fa1_fk_PerfilUsuario_rut">
+            <End Role="PerfilUsuario" EntitySet="PerfilUsuario" />
+            <End Role="Factura" EntitySet="Factura" />
+          </AssociationSet>
+          <AssociationSet Name="GuiaDespacho_nrofac_c0530d77_fk_Factura_nrofac" Association="Self.GuiaDespacho_nrofac_c0530d77_fk_Factura_nrofac">
+            <End Role="Factura" EntitySet="Factura" />
+            <End Role="GuiaDespacho" EntitySet="GuiaDespacho" />
+          </AssociationSet>
+          <AssociationSet Name="SolicitudServicio_nrofac_80536535_fk_Factura_nrofac" Association="Self.SolicitudServicio_nrofac_80536535_fk_Factura_nrofac">
+            <End Role="Factura" EntitySet="Factura" />
+            <End Role="SolicitudServicio" EntitySet="SolicitudServicio" />
+          </AssociationSet>
+          <AssociationSet Name="StockProducto_nrofac_7c0b3b70_fk_Factura_nrofac" Association="Self.StockProducto_nrofac_7c0b3b70_fk_Factura_nrofac">
+            <End Role="Factura" EntitySet="Factura" />
+            <End Role="StockProducto" EntitySet="StockProducto" />
+          </AssociationSet>
+          <AssociationSet Name="GuiaDespacho_idprod_2f99a153_fk_Producto_idprod" Association="Self.GuiaDespacho_idprod_2f99a153_fk_Producto_idprod">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="GuiaDespacho" EntitySet="GuiaDespacho" />
+          </AssociationSet>
+          <AssociationSet Name="SolicitudServicio_ruttec_ac9a6f64_fk_PerfilUsuario_rut" Association="Self.SolicitudServicio_ruttec_ac9a6f64_fk_PerfilUsuario_rut">
+            <End Role="PerfilUsuario" EntitySet="PerfilUsuario" />
+            <End Role="SolicitudServicio" EntitySet="SolicitudServicio" />
+          </AssociationSet>
+          <AssociationSet Name="StockProducto_idprod_dc3254a8_fk_Producto_idprod" Association="Self.StockProducto_idprod_dc3254a8_fk_Producto_idprod">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="StockProducto" EntitySet="StockProducto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="base_datosModelStoreContainer" CdmEntityContainer="base_datosEntities">
+          <EntitySetMapping Name="AnwoStockProducto">
+            <EntityTypeMapping TypeName="base_datosModel.AnwoStockProducto">
+              <MappingFragment StoreEntitySet="AnwoStockProducto">
+                <ScalarProperty Name="nroserieanwo" ColumnName="nroserieanwo" />
+                <ScalarProperty Name="nomprodanwo" ColumnName="nomprodanwo" />
+                <ScalarProperty Name="precioanwo" ColumnName="precioanwo" />
+                <ScalarProperty Name="reservado" ColumnName="reservado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_group">
+            <EntityTypeMapping TypeName="base_datosModel.auth_group">
+              <MappingFragment StoreEntitySet="auth_group">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_group_permissions">
+            <EntityTypeMapping TypeName="base_datosModel.auth_group_permissions">
+              <MappingFragment StoreEntitySet="auth_group_permissions">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="group_id" ColumnName="group_id" />
+                <ScalarProperty Name="permission_id" ColumnName="permission_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_permission">
+            <EntityTypeMapping TypeName="base_datosModel.auth_permission">
+              <MappingFragment StoreEntitySet="auth_permission">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="content_type_id" ColumnName="content_type_id" />
+                <ScalarProperty Name="codename" ColumnName="codename" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_user">
+            <EntityTypeMapping TypeName="base_datosModel.auth_user">
+              <MappingFragment StoreEntitySet="auth_user">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="last_login" ColumnName="last_login" />
+                <ScalarProperty Name="is_superuser" ColumnName="is_superuser" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="is_staff" ColumnName="is_staff" />
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="date_joined" ColumnName="date_joined" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_user_groups">
+            <EntityTypeMapping TypeName="base_datosModel.auth_user_groups">
+              <MappingFragment StoreEntitySet="auth_user_groups">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="group_id" ColumnName="group_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_user_user_permissions">
+            <EntityTypeMapping TypeName="base_datosModel.auth_user_user_permissions">
+              <MappingFragment StoreEntitySet="auth_user_user_permissions">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="permission_id" ColumnName="permission_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="authtoken_token">
+            <EntityTypeMapping TypeName="base_datosModel.authtoken_token">
+              <MappingFragment StoreEntitySet="authtoken_token">
+                <ScalarProperty Name="key" ColumnName="key" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="django_admin_log">
+            <EntityTypeMapping TypeName="base_datosModel.django_admin_log">
+              <MappingFragment StoreEntitySet="django_admin_log">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="action_time" ColumnName="action_time" />
+                <ScalarProperty Name="object_id" ColumnName="object_id" />
+                <ScalarProperty Name="object_repr" ColumnName="object_repr" />
+                <ScalarProperty Name="action_flag" ColumnName="action_flag" />
+                <ScalarProperty Name="change_message" ColumnName="change_message" />
+                <ScalarProperty Name="content_type_id" ColumnName="content_type_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="django_content_type">
+            <EntityTypeMapping TypeName="base_datosModel.django_content_type">
+              <MappingFragment StoreEntitySet="django_content_type">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="app_label" ColumnName="app_label" />
+                <ScalarProperty Name="model" ColumnName="model" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="django_migrations">
+            <EntityTypeMapping TypeName="base_datosModel.django_migrations">
+              <MappingFragment StoreEntitySet="django_migrations">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="app" ColumnName="app" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="applied" ColumnName="applied" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="django_session">
+            <EntityTypeMapping TypeName="base_datosModel.django_session">
+              <MappingFragment StoreEntitySet="django_session">
+                <ScalarProperty Name="session_key" ColumnName="session_key" />
+                <ScalarProperty Name="session_data" ColumnName="session_data" />
+                <ScalarProperty Name="expire_date" ColumnName="expire_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Factura">
+            <EntityTypeMapping TypeName="base_datosModel.Factura">
+              <MappingFragment StoreEntitySet="Factura">
+                <ScalarProperty Name="nrofac" ColumnName="nrofac" />
+                <ScalarProperty Name="fechafac" ColumnName="fechafac" />
+                <ScalarProperty Name="descfac" ColumnName="descfac" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="rutcli" ColumnName="rutcli" />
+                <ScalarProperty Name="idprod" ColumnName="idprod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GuiaDespacho">
+            <EntityTypeMapping TypeName="base_datosModel.GuiaDespacho">
+              <MappingFragment StoreEntitySet="GuiaDespacho">
+                <ScalarProperty Name="nrogd" ColumnName="nrogd" />
+                <ScalarProperty Name="estadogd" ColumnName="estadogd" />
+                <ScalarProperty Name="nrofac" ColumnName="nrofac" />
+                <ScalarProperty Name="idprod" ColumnName="idprod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PerfilUsuario">
+            <EntityTypeMapping TypeName="base_datosModel.PerfilUsuario">
+              <MappingFragment StoreEntitySet="PerfilUsuario">
+                <ScalarProperty Name="rut" ColumnName="rut" />
+                <ScalarProperty Name="tipousu" ColumnName="tipousu" />
+                <ScalarProperty Name="dirusu" ColumnName="dirusu" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Producto">
+            <EntityTypeMapping TypeName="base_datosModel.Producto">
+              <MappingFragment StoreEntitySet="Producto">
+                <ScalarProperty Name="idprod" ColumnName="idprod" />
+                <ScalarProperty Name="nomprod" ColumnName="nomprod" />
+                <ScalarProperty Name="descprod" ColumnName="descprod" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="imagen" ColumnName="imagen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SolicitudServicio">
+            <EntityTypeMapping TypeName="base_datosModel.SolicitudServicio">
+              <MappingFragment StoreEntitySet="SolicitudServicio">
+                <ScalarProperty Name="nrosol" ColumnName="nrosol" />
+                <ScalarProperty Name="tiposol" ColumnName="tiposol" />
+                <ScalarProperty Name="fechavisita" ColumnName="fechavisita" />
+                <ScalarProperty Name="descsol" ColumnName="descsol" />
+                <ScalarProperty Name="estadosol" ColumnName="estadosol" />
+                <ScalarProperty Name="nrofac" ColumnName="nrofac" />
+                <ScalarProperty Name="ruttec" ColumnName="ruttec" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StockProducto">
+            <EntityTypeMapping TypeName="base_datosModel.StockProducto">
+              <MappingFragment StoreEntitySet="StockProducto">
+                <ScalarProperty Name="idstock" ColumnName="idstock" />
+                <ScalarProperty Name="idprod" ColumnName="idprod" />
+                <ScalarProperty Name="nrofac" ColumnName="nrofac" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

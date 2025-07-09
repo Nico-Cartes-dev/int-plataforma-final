@@ -1,0 +1,8 @@
+Sitio de descarga de json-simple-1.1.1.jar
+------------------------------------------
+https://code.google.com/archive/p/json-simple/downloads
+
+
+Sitio de descarga de gson-2.13.1.jar
+------------------------------------
+https://search.maven.org/artifact/com.google.code.gson/gson/2.13.1/jar?eh=

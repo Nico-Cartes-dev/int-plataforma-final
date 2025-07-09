@@ -1,0 +1,103 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+    <link href="{% static 'core/css/home.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 style="color: blue !important; font-weight: bolder;">
+        Mis Solicitudes de Servicio <br>
+    </h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nro SS</th>
+                <th>Cliente</th>
+                <th>Tipo SS</th>
+                <th>Fecha Visita</th>
+                <th>Técnico</th>
+                <th>Descripción</th>
+                <th>Estado SS</th>
+                {% if user.perfilusuario.tipousu != 'Cliente' %}
+                    <th>Opciones</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% if lista %}
+                {% for sol in lista %}
+                    <tr>
+                        <td>{{ sol.nrosol }}</td>
+                        <td>{{ sol.nomcli }}</td>
+                        <td>{{ sol.tiposol }}</td>
+                        <td>{{ sol.fechavisita }}</td>
+                        <td>{{ sol.nomtec }}</td>
+                        <td>{{ sol.descser }}</td>
+                        <td>{{ sol.estadosol }}</td>
+                        {% if user.perfilusuario.tipousu != 'Cliente' %}
+                        <td>
+                            <a href="{% url 'aceptar_solicitud' sol.nrosol %}">Aceptar</a>
+                            <a href="#" class="btn-modificar"
+                               data-bs-toggle="modal"
+                               data-bs-target="#modalModificar"
+                               data-nrosol="{{ sol.nrosol }}"
+                               data-fechavisita="{{ sol.fechavisita|date:'Y-m-d' }}">
+                               Modificar
+                            </a>
+                            <a href="{% url 'cerrar_solicitud' sol.nrosol %}">Cerrar</a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Modificar Solicitud -->
+<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="post" action="{% url 'modificar_solicitud' 0 %}" id="formModificar">
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalModificarLabel">Modificar Solicitud de Servicio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="nrosol" id="modal-nrosol">
+          <div class="mb-3">
+            <label for="modal-fechavisita" class="form-label">Fecha de la visita</label>
+            <input type="date" class="form-control" name="fechavisita" id="modal-fechavisita" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Modificar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('formModificar');
+    var nrosolInput = document.getElementById('modal-nrosol');
+    var fechaInput = document.getElementById('modal-fechavisita');
+
+    document.querySelectorAll('.btn-modificar').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var nrosol = this.getAttribute('data-nrosol');
+            var fecha = this.getAttribute('data-fechavisita');
+            nrosolInput.value = nrosol;
+            fechaInput.value = fecha;
+            // Cambia la acción del formulario para incluir el nrosol
+            form.action = "{% url 'modificar_solicitud' 0 %}".replace('/0/', '/' + nrosol + '/');
+        });
+    });
+});
+</script>
+{% endblock content %}

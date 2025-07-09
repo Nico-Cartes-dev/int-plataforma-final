@@ -1,0 +1,86 @@
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.img-hover-zoom {
+  overflow: hidden;
+}
+
+.img-hover-zoom img {
+  transition: transform 0.5s ease;
+  object-fit: cover;
+  height: 200px;
+  width: 100%;
+}
+
+.img-hover-zoom:hover img {
+  transform: scale(1.1);
+}
+
+.btn-animate {
+  transition: all 0.3s ease-in-out;
+  border-radius: 50px;
+}
+
+.btn-animate:hover {
+  background-color: #007bff;
+  color: white;
+  transform: scale(1.05);
+}
+/* título */
+.section-title {
+  color: #205072;        /* Azul más suave que el primary */
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* fondo gris suave tras el grid */
+.product-grid-section {
+  background-color: #f5f5f5;  /* gris claro */
+  padding: 2rem 0;
+}
+
+/* tarjetas */
+.product-card {
+  border: none;
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #ffffff;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+/* animación imagen */
+.img-hover-zoom {
+  overflow: hidden;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+.img-hover-zoom img {
+  transition: transform 0.5s ease;
+}
+.img-hover-zoom img:hover {
+  transform: scale(1.1);
+}
+
+/* botón con efecto */
+.btn-animate {
+  transition: background-color 0.3s, transform 0.3s;
+}
+.btn-animate:hover {
+  background-color: #19394e;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+

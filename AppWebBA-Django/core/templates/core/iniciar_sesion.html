@@ -1,0 +1,101 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+<link href="{% static 'core/css/iniciar_sesion.css' %}" rel="stylesheet">
+<style>
+    .form-container {
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        animation: fade-slide-in 0.8s ease-out forwards;
+    }
+
+    @keyframes fade-slide-in {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Estilo elegante para inputs */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select,
+    textarea {
+        transition: all 0.3s ease;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px;
+        width: 100%;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+        background-color: #f9f9ff;
+    }
+
+    /* Labels elegantes */
+    label {
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-title {
+        color: #092b57;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .btn-custom-color {
+    background-color: #092b57; /* Azul Google */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 30px;
+    transition: all 0.3s ease;
+}
+
+.btn-custom-color:hover {
+    background-color: #19498d;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-container">
+                <h2 class="form-title">Iniciar Sesión</h2>
+                <form method="POST" enctype="multipart/form-data" id="formulario">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-custom-color">Ingresar</button>
+                    </div>
+                    {% if mesg %}
+                        <div id="form_message" class="alert alert-danger mt-3" role="alert">{{ mesg }}</div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

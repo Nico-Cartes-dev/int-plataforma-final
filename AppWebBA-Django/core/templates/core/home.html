@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+  <link href="{% static 'core/css/home.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <!-- Hero Image -->
+  <section class="home-hero">
+    <img src="{% static 'core/img/home.jpg' %}" alt="Aires Acondicionados" class="hero-img">
+  </section>
+
+  <!-- Título y descripción -->
+  <section class="home-title text-center py-4">
+    <h1 class="display-4">Aires Acondicionados Buenos Aires</h1>
+    <p class="lead">
+      En Aires Buenos Aires ofrecemos soluciones de climatización de alta eficiencia para tu hogar y empresa.  
+      Más de 20 años de experiencia entregando confort y ahorro energético.
+    </p>
+  </section>
+
+  <!-- Historia + Botón tienda -->
+  <section class="home-info py-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Columna historia -->
+        <div class="col-12 col-md-6 mb-4 mb-md-0">
+          <h2>Nuestra Historia</h2>
+          <p>
+            Fundada en el año 2000, Aires Buenos Aires nació con la misión de llevar el máximo confort 
+            a hogares y empresas. Desde nuestros primeros sistemas de aire acondicionado hasta las 
+            soluciones innovadoras de hoy, hemos crecido gracias a la confianza de nuestros clientes 
+            y al compromiso con la calidad y el servicio.
+          </p>
+        </div>
+        <!-- Columna botón tienda -->
+        <div class="col-12 col-md-6 text-center">
+          <a href="{% url 'tienda' %}" class="btn btn-primary btn-store btn-lg">
+            Visitar Tienda
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

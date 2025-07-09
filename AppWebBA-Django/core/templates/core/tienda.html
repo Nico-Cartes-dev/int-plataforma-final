@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+  <link href="{% static 'core/css/tienda.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <!-- TÍTULO -->
+  <h1 class="text-center section-title mb-5">Aires Acondicionados Buenos Aires</h1>
+
+  {% if productos %}
+  <div class="product-grid-section">
+    <div class="container border border-secondary rounded p-4 bg-white shadow-sm" >
+      <div class="row justify-content-center">
+        {% for producto in productos %}
+        <div class="col-12 col-sm-6 col-lg-3 mb-4">
+          <div class="card h-100 shadow-sm product-card">
+            <div class="img-hover-zoom">
+              <img src="/media/{{ producto.imagen }}"
+                   class="card-img-top"
+                   alt="{{ producto.nomprod }}">
+            </div>
+            <div class="card-body text-center border border-secondary rounded p-4 bg-white shadow-sm ">
+              <h5 class="card-title">{{ producto.nomprod }}</h5>
+              <p class="card-text small text-muted">{{ producto.descprod }}</p>
+              <p class="mb-3">
+                <strong>CLP:</strong> ${{ producto.precio }}<br>
+                <strong>USD:</strong> ${{ producto.precio_usd }}<br>
+                <strong>Estado:</strong> {{ producto.disponibilidad }}
+              </p>
+              <a href="{% url 'ficha' producto.idprod %}"
+                 class="btn btn-outline-primary btn-animate">
+                Ver Detalles
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <p class="text-center">No hay productos disponibles.</p>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a href="{% url 'home' %}" class="btn btn-info">Ir a la página de inicio</a>
+  </div>
+{% endblock %}

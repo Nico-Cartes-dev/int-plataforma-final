@@ -1,0 +1,146 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+
+<!-- Este es un cambio de prueba -->
+
+    <link href="{% static 'core/css/registrar_usuario.css'%}" rel="stylesheet">
+    <style>
+        .form-container {
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .form-title {
+            color: #092b57;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+    </style>
+
+    <style>
+    .form-container {
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        animation: fade-slide-in 0.8s ease-out forwards;
+    }
+
+    @keyframes fade-slide-in {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Animación al enfocar los campos del formulario */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select,
+    textarea {
+        transition: all 0.3s ease;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px;
+        width: 100%;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+        background-color: #f9f9ff;
+    }
+
+    .form-title {
+        color: #004080;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    label {
+    font-weight: 200; /* menos grueso que bold */
+    font-size: 0.95rem; /* más pequeño pero legible xdxdxdxd*/
+    color: #000000;
+    margin-bottom: 5px;
+    display: block;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-success">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-container">
+                <h2 class="form-title">Registrar Usuario</h2>
+                <form method="POST" action="{% url 'registrar_usuario' %}">
+  {% csrf_token %}
+
+  {% for field in form %}
+    <div class="mb-3">
+      <label>{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}
+        <div class="alert alert-danger mt-1 mb-0 p-1">
+          {{ field.errors|striptags }}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger mt-2">
+      {{ form.non_field_errors }}
+    </div>
+  {% endif %}
+
+  <div class="text-center mt-3">
+    <button class="btn btn-custom-color" type="submit">Guardar</button>
+  </div>
+  {% if mesg %}
+    <div id="form_message" class="alert alert-danger mt-3">{{ mesg }}</div>
+  {% endif %}
+</form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+<script>
+  setTimeout(() => {
+    const alert = document.querySelector('.alert-success');
+    if (alert) {
+      alert.style.transition = "opacity 0.5s ease";
+      alert.style.opacity = "0";
+      setTimeout(() => alert.remove(), 500);
+    }
+  }, 3000);
+</script>
+

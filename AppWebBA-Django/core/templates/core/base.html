@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+        <title>Aires Acondicionados Buenos Aires</title>
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    
+    {% block stylesheet %} {% endblock %}
+
+
+
+</head>
+<body>
+{% block navbar %}
+<nav class="navbar navbar-expand-lg fixed-top sticky-top" style="background-color: #0b3361;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'core/img/logo.jpg' %}"
+           alt="Logo"
+           height="30"
+           class="d-inline-block align-text-top">
+    </a>
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        {# 1. Inicio #}
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link text-white{% if active_page == 'home' %} active{% endif %}"
+               href="{% url 'home' %}">Inicio</a>
+          </li>
+        {% endif %}
+
+        {# 2. Tienda #}
+        <li class="nav-item">
+          <a class="nav-link text-white{% if active_page == 'tienda' %} active{% endif %}"
+             href="{% url 'tienda' %}">Tienda</a>
+        </li>
+
+        {# 3. Registrarse / Iniciar Sesión #}
+        {% if not user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link text-white"
+               href="{% url 'registrar_usuario' %}">Registrarse</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white"
+               href="{% url 'iniciar_sesion' %}">Iniciar Sesión</a>
+          </li>
+        {% endif %}
+
+        {# 4. Admin Sistema (superuser) #}
+        {% if user.is_authenticated and user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link text-white"
+               href="{% url 'admin:index' %}">Admin Sistema</a>
+          </li>
+        {% endif %}
+
+        {# 5. Mantener Productos (staff) #}
+        {% if user.is_authenticated and user.is_staff %}
+          <li class="nav-item">
+            <a class="nav-link text-white"
+               href="{% url 'administrar_productos' 'ins' '-1' %}">Mantener Productos</a>
+          </li>
+        {% endif %}
+
+        {# 6. Links según perfil #}
+        {% if user.is_authenticated %}
+          {% if user.perfilusuario.tipousu == 'Cliente' %}
+            <li class="nav-item">
+              <a class="nav-link{% if active_page == 'facturas' %} active{% endif %}"
+                 href="{% url 'facturas' %}">Mis Compras</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if active_page == 'obtener_solicitudes' %} active{% endif %}"
+                 href="{% url 'obtener_solicitudes' %}">Mis Solicitudes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if active_page == 'ingresar_solicitud_servicio' %} active{% endif %}"
+                 href="{% url 'ingresar_solicitud_servicio' %}">Solicitud Servicio</a>
+            </li>
+          {% elif user.perfilusuario.tipousu == 'Técnico' %}
+            <li class="nav-item">
+              <a class="nav-link{% if active_page == 'obtener_solicitudes_de_servicio' %} active{% endif %}"
+                 href="{% url 'obtener_solicitudes_de_servicio' %}">Mis Solicitudes</a>
+            </li>
+          {% elif user.perfilusuario.tipousu == 'Administrador' %}
+            <li class="nav-item">
+              <a class="nav-link{% if active_page == 'facturas' %} active{% endif %}"
+                 href="{% url 'facturas' %}">Historial Ventas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link{% if active_page == 'obtener_solicitudes_de_servicio' %} active{% endif %}"
+                 href="{% url 'obtener_solicitudes_de_servicio' %}">Solicitudes Servicio</a>
+            </li>
+          {% endif %}
+
+          {# 7. Mis Datos #}
+          <li class="nav-item">
+            <a class="nav-link{% if active_page == 'perfil_usuario' %} active{% endif %}"
+               href="{% url 'perfil_usuario' %}">Mis Datos</a>
+          </li>
+
+          {# 8. Cambiar Contraseña #}
+          <li class="nav-item">
+            <a class="nav-link{% if active_page == 'cambiar_password' %} active{% endif %}"
+               href="{% url 'cambiar_password' %}">Cambiar Contraseña</a>
+          </li>
+
+          {# 9. Cerrar Sesión #}
+          <li class="nav-item">
+            <a class="nav-link text-danger"
+               href="{% url 'cerrar_sesion' %}">Cerrar Sesión</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+    <div class="content container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <br>
+    <hr>
+    <!-- FOOTER -->
+<footer class="footer text-white mt-5">
+  <div class="container py-5">
+  <div class="row">
+    
+    <!-- Sobre Nosotros -->
+    <div class="col-12 col-md-4 mb-4 text-start">
+      <h5>Sobre Buenos Aires</h5>
+      <p>
+        Somos líderes en aire acondicionado con más de 20 años de experiencia.
+        Ofrecemos productos de calidad y un servicio excepcional.
+      </p>
+    </div>
+
+    <!-- Enlaces Rápidos -->
+    <div class="col-12 col-md-4 mb-4 text-start">
+      <h5>Enlaces</h5>
+      <ul class="list-unstyled">
+        <li><a href="{% url 'home' %}">Inicio</a></li>
+        <li><a href="{% url 'tienda' %}">Tienda</a></li>
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'perfil_usuario' %}">Mi Perfil</a></li>
+        {% endif %}
+        <li><a href="">Contacto</a></li>
+      </ul>
+    </div>
+
+    <!-- Contacto -->
+    <div class="col-12 col-md-4 mb-4 text-start">
+      <h5>Contacto</h5>
+      <p><i class="bi bi-geo-alt-fill"></i> Av. Siempre Viva 742, Santiago</p>
+      <p><i class="bi bi-telephone-fill"></i> +56 9 1234 5678</p>
+      <p><i class="bi bi-envelope-fill"></i> soporte@buenosaires.cl</p>
+    </div>
+
+  </div>
+</div>
+
+
+
+    <footer class="footer text-white mt-5">
+  <div class="container py-5">
+    <div class="row">
+      <!-- …tus 3 columnas previas: Sobre, Enlaces, Contacto… -->
+    </div>
+
+    <!-- Usuarios de prueba (full width debajo) -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <h5 class="text-center mb-3">Usuarios de Prueba</h5>
+        <dl class="row">
+          <dt class="col-sm-3">Superusuario</dt>
+          <dd class="col-sm-9">admin</dd>
+
+          <dt class="col-sm-3">Administrador</dt>
+          <dd class="col-sm-9">emusk</dd>
+
+          <dt class="col-sm-3">Cliente</dt>
+          <dd class="col-sm-9">atorres, jperez, mayala, jsoto, pmora</dd>
+
+          <dt class="col-sm-3">Técnico</dt>
+          <dd class="col-sm-9">jgatica, mvera, pdiazduoc</dd>
+
+          <dt class="col-sm-3">Bodeguero</dt>
+          <dd class="col-sm-9">creyes</dd>
+
+          <dt class="col-sm-3">Vendedor</dt>
+          <dd class="col-sm-9">bgates</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-dark text-center py-2">
+    <small>&copy; 2025 Aires Acondicionados Buenos Aires. Todos los derechos reservados.</small>
+  </div>
+</footer>
+    </div>
+    <!-- FIN FOOTER -->
+  </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function() {
+            
+            set_nav_li("#inicio", "{% url 'home' %}", "{% static 'core/img/casco_cerrado.png' %}");
+            set_nav_li("#tienda", "{% url 'tienda' %}", "{% static 'core/img/bolsa.png' %}");
+            set_nav_li("#admsis", "{% url 'admin:index' %}", "{% static 'core/img/cohete.png' %}");
+            set_nav_li("#manpro", "{% url 'administrar_productos' 'ins' '-1' %}", "{% static 'core/img/starkind.png' %}");
+            set_nav_li("#regist", "{% url 'registrar_usuario' %}", "{% static 'core/img/guante.png' %}");
+            set_nav_li("#solser", "{% url 'obtener_solicitudes_de_servicio' %}", "{% static 'core/img/guante.png' %}");
+            set_nav_li("#inises", "{% url 'iniciar_sesion' %}", "{% static 'core/img/casco_abierto.png' %}");
+            set_nav_li("#cerses", "{% url 'cerrar_sesion' %}", "{% static 'core/img/casco_abierto.png' %}");
+            set_nav_li("#perfil", "{% url 'perfil_usuario' %}", "{% static 'core/img/perfil2.png' %}");
+            set_nav_li("#chpass", "{% url 'cambiar_password' %}", "{% static 'core/img/password.png' %}");
+
+            function set_nav_li(id, url, img) {
+                $(id).addClass('nav-item list-inline-item align-center nav_item_text');
+                name = $(id).html();
+                $(id).html('');
+                if (id == "#perfil") {
+                    $(id).append(`<a href="${url}"><img class="img_menu" src="${img}" style="height: 25px !important">${name}</a>`)
+                } else {
+                    $(id).append(`<a href="${url}">${name}</a>`)
+                }
+            }
+
+            $('#id_username').focus();
+            
+        });
+    </script>
+</body>
+</html>

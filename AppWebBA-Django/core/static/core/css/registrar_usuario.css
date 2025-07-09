@@ -1,0 +1,65 @@
+h1 {
+    margin-top: 30px;
+    margin-bottom: 50px;
+    color: blue !important;
+}
+
+label {
+    width: 190px;
+}
+
+input {
+    width: 300px;
+}
+
+form {
+    text-align: left;
+    margin:auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.helptext {
+    float: left;
+    /* display: none !important; */
+}
+
+.btn_guardar {
+    margin-top: 40px;
+    text-align: center !important;
+}
+
+.btn-custom-color {
+    background-color: #092b57; /* Azul Google */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 30px;
+    transition: all 0.3s ease;
+}
+
+.btn-custom-color:hover {
+    background-color: #19498d;
+}
+
+.alert-success {
+    position: relative;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    animation: fadeOut 1s ease-out forwards;
+    animation-delay: 3s;
+}
+
+.alert-success::before {
+    content: '✔';
+    font-weight: bold;
+    color: #28a745;
+    font-size: 1.2rem;
+}

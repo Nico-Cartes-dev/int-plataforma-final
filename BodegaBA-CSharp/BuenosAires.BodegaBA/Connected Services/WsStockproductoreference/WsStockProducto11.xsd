@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/BuenosAires.Model" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/BuenosAires.Model" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="Respuesta">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Accion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HayErrores" type="xs:boolean" />
+      <xs:element minOccurs="0" name="JsonAutenticado" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JsonListaProducto" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JsonProducto" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="JsonStockProducto" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Mensaje" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlAnwoStockProducto" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlFactura" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlGuiaDespacho" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlListaAnwoStockProducto" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlListaFactura" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlListaGuiaDespacho" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlListaPerfilUsuario" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlListaProducto" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlListaSolicitudServicio" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlListaStockProducto" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlPerfilUsuario" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlProducto" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlSolicitudServicio" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="XmlStockProducto" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Respuesta" nillable="true" type="tns:Respuesta" />
+</xs:schema>

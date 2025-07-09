@@ -1,0 +1,52 @@
+.imagen_central {
+    width: 500px;
+}
+/* HERO */
+.home-hero {
+  overflow: hidden;
+  border-top: 30px solid white;
+}
+.hero-img {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+/* TÍTULO */
+.home-title {
+  background-color: #f8f9fa;
+}
+.home-title .display-4 {
+  color: #0b3361;
+  font-weight: 700;
+}
+.home-title .lead {
+  color: #555;
+}
+
+/* SECCIÓN DE INFO */
+.home-info {
+  background-color: #ffffff;
+}
+.home-info h2 {
+  color: #0b3361;
+  margin-bottom: 1rem;
+}
+.home-info p {
+  color: #444;
+  line-height: 1.6;
+}
+
+/* BOTÓN TIENDA ANIMADO */
+.btn-store {
+  background-color: #0b3361;
+  border: none;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-store:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}

@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+    <link href="{% static 'core/css/forms.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="titulo-ficha text-center">Aires Acondicionados Buenos Aires</h1>
+
+    <div class="row align-items-start">
+        <!-- Imagen -->
+        <div class="col-md-6 mb-4 text-center">
+            <img src="/media/{{ producto.imagen }}" class="ficha-auto-imagen" alt="{{ producto.nomprod }}">
+        </div>
+
+        <!-- Detalles del producto -->
+        <div class="col-md-6 border border-secondary rounded p-4 bg-white shadow-sm">
+            <h2 class="mb-3">{{ producto.nomprod }}</h2>
+            <p><strong>ID:</strong> {{ producto.idprod }}</p>
+            <p><strong>Descripción:</strong> {{ producto.descprod }}</p>
+
+            <hr>
+
+            <p><strong>Precio CLP:</strong><br>CLP ${{ producto.precio|floatformat:0 }}</p>
+
+            <p><strong>Precio USD:</strong><br>
+                <span class="producto-precio-usd">${{ producto.precio_usd }}</span>
+            </p>
+
+            <p>
+                <strong>Cantidad en bodega:</strong> {{ producto.cantidad }}<br>
+                <strong>Disponibilidad:</strong> 
+                <span class="{% if producto.disponibilidad == 'AGOTADO' %}producto-agotado{% else %}producto-disponible{% endif %}">
+                    {{ producto.disponibilidad }}
+                </span>
+            </p>
+
+            {% if producto.disponibilidad == 'DISPONIBLE' %}
+                <form method="POST" class="mt-3">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-md">Comprar</button>
+                    {% if mesg %}
+                        <div class="alert alert-danger mt-3" role="alert">{{ mesg }}</div>
+                    {% endif %}
+                </form>
+            {% else %}
+                <div class="alert alert-danger mt-3">Producto agotado, no disponible para compra.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+h1 {
+    color: blue !important;
+}
+
+.admin-productos-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+#formulario ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#formulario li {
+    margin-bottom: 1rem;
+}
+
+.mini_auto {
+    width: 60px;
+    height: auto;
+    border-radius: 6px;
+}
+
+#tabla_datos {
+    margin-top: 2rem;
+}
+
+.titulo_boton {
+    width: 100px;
+    text-align: center;
+}
+
+.btnwidth {
+    margin: 0.2rem;
+}
+
+#form_message {
+    margin-top: 1rem;
+}
+
+input[type="submit"],
+.btn {
+    border-radius: 0.5rem !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: 500;
+}
+
+.form-botones {
+    margin-top: 2rem;
+}
+
+/* Estilo contenedor del formulario */
+#formulario {
+    margin-bottom: 2rem;
+}
+
+/* Elimina viñetas y espaciado del ul */
+#formulario ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Cada campo (li) con separación y columna */
+#formulario li {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Label arriba del campo */
+#formulario label {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #212529;
+}
+
+/* Inputs, selects y textareas modernos */
+#formulario input[type="text"],
+#formulario input[type="number"],
+#formulario input[type="email"],
+#formulario input[type="file"],
+#formulario input[type="password"],
+#formulario textarea,
+#formulario select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: #fff;
+}
+
+/* Efecto focus azul elegante */
+#formulario input:focus,
+#formulario textarea:focus,
+#formulario select:focus {
+    border-color: #0d6efd;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+/* Botones agrupados con espacio */
+.form-botones {
+    margin-top: 2rem;
+}
+
+/* Mensaje de error debajo del form */
+#form_message {
+    margin-top: 1rem;
+}
+
+.formulario-pequeno {
+    max-width: 600px;
+    margin: 0 auto; /* centra horizontalmente */
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Opcional: reduce un poco el tamaño de texto */
+#formulario input,
+#formulario select,
+#formulario textarea {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.65rem;
+}
