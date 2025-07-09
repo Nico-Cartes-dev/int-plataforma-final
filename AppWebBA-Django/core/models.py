@@ -37,7 +37,7 @@ class Producto(models.Model):
 class Factura(models.Model):
     nrofac = models.IntegerField(primary_key=True)
     rutcli = models.ForeignKey(PerfilUsuario, models.DO_NOTHING, db_column='rutcli', null=False, blank=False)
-    idprod = models.ForeignKey(Producto, models.DO_NOTHING, db_column='idprod', null=False, blank=False)
+    idprod = models.ForeignKey(Producto, models.DO_NOTHING, db_column='idprod', null=True, blank=True)
     fechafac = models.DateField(null=False, blank=False)
     descfac = models.CharField(max_length=300, null=False, blank=False)
     monto = models.IntegerField(null=False, blank=False)
@@ -56,7 +56,9 @@ class Factura(models.Model):
             clave += f' IDS-{stocks[0].idstock}'
         else:
             clave += f' **********'
-        return f'{clave} - {self.rutcli.user.first_name[0]}. {self.rutcli.user.last_name} - {self.idprod.nomprod}'
+        
+        producto_nombre = self.idprod.nomprod if self.idprod else 'Servicio'
+        return f'{clave} - {self.rutcli.user.first_name[0]}. {self.rutcli.user.last_name} - {producto_nombre}'
 
 class SolicitudServicio(models.Model):
     TIPOSOL_CHOICES = [
@@ -65,6 +67,7 @@ class SolicitudServicio(models.Model):
         ('Reparación', 'Reparación'),
     ]
     ESTADOSOL_CHOICES = [
+        ('Pendiente', 'Pendiente'),
         ('Aceptada', 'Aceptada'),
         ('Modificada', 'Modificada'),
         ('Cerrada', 'Cerrada'),
@@ -74,15 +77,17 @@ class SolicitudServicio(models.Model):
     nrofac = models.ForeignKey(Factura, models.DO_NOTHING, db_column='nrofac', null=False, blank=False)
     tiposol = models.CharField(choices=TIPOSOL_CHOICES, max_length=50, null=False, blank=False)
     fechavisita = models.DateField(null=False, blank=False)
-    ruttec = models.ForeignKey(PerfilUsuario, models.DO_NOTHING, db_column='ruttec', null=False, blank=False)
+    ruttec = models.ForeignKey(PerfilUsuario, models.DO_NOTHING, db_column='ruttec', null=True, blank=True)
     descsol = models.CharField(max_length=200, null=False, blank=False)
     estadosol = models.CharField(choices=ESTADOSOL_CHOICES, max_length=50, null=False, blank=False)
+    guia = models.ForeignKey('GuiaDespacho', models.DO_NOTHING, db_column='nrogd', null=True, blank=True)
 
     class Meta:
         db_table = 'SolicitudServicio'
     
     def __str__(self):
-        clave = f'{self.nrosol} - {self.tiposol} - Técnico ({self.ruttec.user.first_name} {self.ruttec.user.last_name})'
+        tecnico_nombre = f"{self.ruttec.user.first_name} {self.ruttec.user.last_name}" if self.ruttec else "Sin asignar"
+        clave = f'{self.nrosol} - {self.tiposol} - Técnico ({tecnico_nombre})'
         clave += f' - Cliente ({self.nrofac.rutcli.user.first_name} {self.nrofac.rutcli.user.last_name}) Factura ({self.nrofac})'
         return clave
 

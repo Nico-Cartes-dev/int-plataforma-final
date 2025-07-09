@@ -9,7 +9,7 @@ from .views import (
     registrar_usuario, cerrar_sesion, perfil_usuario, iniciar_pago,
     pago_exitoso, obtener_solicitudes_de_servicio, mis_compras,
      facturas, ingresar_solicitud_servicio, aceptar_solicitud,
-    modificar_solicitud, cerrar_solicitud
+    modificar_solicitud, cerrar_solicitud, probar_compra_directa
 )
 
 urlpatterns = [
@@ -60,5 +60,8 @@ urlpatterns = [
     path('facturas/', facturas, name='facturas'),  # For admin to see all invoices
     
     path('ingresar_solicitud_servicio/', ingresar_solicitud_servicio, name='ingresar_solicitud_servicio'),
+    
+    # Testing URL - Solo para debugging
+    path('probar_compra/<int:producto_id>/', probar_compra_directa, name='probar_compra_directa'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

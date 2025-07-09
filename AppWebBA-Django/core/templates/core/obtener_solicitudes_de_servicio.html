@@ -43,7 +43,13 @@
                                data-bs-toggle="modal"
                                data-bs-target="#modalModificar"
                                data-nrosol="{{ sol.nrosol }}"
-                               data-fechavisita="{{ sol.fechavisita|date:'Y-m-d' }}">
+                               data-fechavisita="{{ sol.fechavisita|date:'Y-m-d' }}"
+                               data-ruttec="{{ sol.ruttec }}"
+                               data-estadosol="{{ sol.estadosol }}"
+                               data-usuario="{{ user.perfilusuario.rut }}"
+                               data-nomtec="{{ sol.nomtec }}"
+                               data-tipousu="{{ user.perfilusuario.tipousu }}"
+                               >
                                Modificar
                             </a>
                             <a href="{% url 'cerrar_solicitud' sol.nrosol %}">Cerrar</a>
@@ -74,7 +80,9 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Modificar</button>
+          <button type="submit" class="btn btn-primary" name="accion" value="modificar">Modificar Fecha</button>
+          <button type="submit" class="btn btn-success d-none" id="btn-aceptar" name="accion" value="aceptar">Aceptar Solicitud</button>
+          <button type="submit" class="btn btn-warning d-none" id="btn-soltar" name="accion" value="soltar">Soltar Solicitud</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         </div>
       </div>
@@ -87,15 +95,36 @@ document.addEventListener('DOMContentLoaded', function() {
     var form = document.getElementById('formModificar');
     var nrosolInput = document.getElementById('modal-nrosol');
     var fechaInput = document.getElementById('modal-fechavisita');
+    var btnAceptar = document.getElementById('btn-aceptar');
+    var btnSoltar = document.getElementById('btn-soltar');
 
     document.querySelectorAll('.btn-modificar').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var nrosol = this.getAttribute('data-nrosol');
             var fecha = this.getAttribute('data-fechavisita');
+            var ruttec = this.getAttribute('data-ruttec');
+            var usuario = this.getAttribute('data-usuario');
+            var estadosol = this.getAttribute('data-estadosol');
+            var tipousu = this.getAttribute('data-tipousu');
+
             nrosolInput.value = nrosol;
             fechaInput.value = fecha;
-            // Cambia la acción del formulario para incluir el nrosol
-            form.action = "{% url 'modificar_solicitud' 0 %}".replace('/0/', '/' + nrosol + '/');
+            form.action = "{% url 'modificar_solicitud' 0 %}".replace('/0/', '/' + nrosol.replace(/\s/g, '') + '/');
+
+            // Lógica para mostrar/ocultar botones
+            btnAceptar.classList.add('d-none');
+            btnSoltar.classList.add('d-none');
+            
+            if (tipousu === 'Técnico') {
+                // Si no hay técnico asignado (ruttec es null o vacío), mostrar botón aceptar
+                if (!ruttec || ruttec === 'None' || ruttec === '') {
+                    btnAceptar.classList.remove('d-none');
+                }
+                // Si el técnico asignado es el usuario actual, mostrar botón soltar
+                else if (ruttec === usuario) {
+                    btnSoltar.classList.remove('d-none');
+                }
+            }
         });
     });
 });

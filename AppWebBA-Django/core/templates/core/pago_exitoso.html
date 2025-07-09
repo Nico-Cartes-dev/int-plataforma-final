@@ -20,6 +20,22 @@
                     Correo electrónico: {{ email }}<br><br>
                     Monto a Pagar: {{ amount }}<br><br>
 
+                    {% if pago_exitoso %}
+                        {% if servicio_procesado %}
+                            <div class="alert alert-success">
+                                <strong>¡Solicitud de servicio procesada correctamente!</strong><br>
+                                Su solicitud ha sido registrada y será procesada por nuestro equipo técnico.
+                            </div>
+                        {% endif %}
+                        
+                        {% if compra_procesada %}
+                            <div class="alert alert-success">
+                                <strong>¡Compra procesada correctamente!</strong><br>
+                                Su factura y guía de despacho han sido generadas. El producto será preparado para el envío.
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
                     <a href="{% url 'tienda' %}" class="btn btn-info btn-sm">Ir a la tienda</a>
                 </div>
             </div>

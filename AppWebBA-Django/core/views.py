@@ -5,7 +5,7 @@ from django.http import HttpRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import Producto, PerfilUsuario, SolicitudServicio, Factura
+from .models import Producto, PerfilUsuario, SolicitudServicio, Factura, GuiaDespacho
 from .forms import ProductoForm, IniciarSesionForm
 from .forms import RegistrarUsuarioForm, PerfilUsuarioForm
 from django.db.models import Count, Case, When, Value, CharField, Q
@@ -16,6 +16,112 @@ import random
 import requests
 from .utils import get_exchange_clp_usd
 import logging
+
+def guardar_compra_en_bd(producto_id, perfil_cliente, precio=None):
+    """
+    Función auxiliar para guardar una compra directamente en la base de datos
+    sin depender de WebPay. Útil para testing y debugging.
+    """
+    try:
+        logger.info(f"=== GUARDANDO COMPRA EN BD ===")
+        logger.info(f"Producto ID: {producto_id}, Cliente: {perfil_cliente.rut}")
+        
+        # Obtener el producto
+        producto = Producto.objects.get(idprod=producto_id)
+        logger.info(f"Producto obtenido: {producto.nomprod}")
+        
+        # Usar precio del producto si no se especifica
+        if precio is None:
+            precio = producto.precio
+        
+        # 1. Crear la factura
+        from datetime import date
+        
+        # Generar un número de factura único
+        ultima_factura = Factura.objects.order_by('-nrofac').first()
+        nrofac_num = (ultima_factura.nrofac + 1) if ultima_factura else 1
+        logger.info(f"Generando número de factura: {nrofac_num}")
+        
+        # Crear la factura
+        factura = Factura.objects.create(
+            nrofac=nrofac_num,
+            rutcli=perfil_cliente,
+            idprod=producto,
+            fechafac=date.today(),
+            descfac=f'Compra de {producto.nomprod}',
+            monto=precio
+        )
+        logger.info(f"Factura creada exitosamente: {factura.nrofac}")
+        
+        # 2. Crear la guía de despacho
+        ultima_guia = GuiaDespacho.objects.order_by('-nrogd').first()
+        nrogd_num = (ultima_guia.nrogd + 1) if ultima_guia else 1
+        logger.info(f"Generando número de guía: {nrogd_num}")
+        
+        guia_despacho = GuiaDespacho.objects.create(
+            nrogd=nrogd_num,
+            nrofac=factura,
+            idprod=producto,
+            estadogd='En bodega'
+        )
+        logger.info(f"Guía de despacho creada exitosamente: {guia_despacho.nrogd}")
+        
+        # 3. Crear solicitud de servicio automática para TODA compra
+        solicitud_creada = False
+        # Buscar un técnico disponible
+        tecnico = PerfilUsuario.objects.filter(tipousu='Técnico').first()
+        
+        if tecnico:
+            # Generar un número de solicitud único
+            ultima_solicitud = SolicitudServicio.objects.order_by('-nrosol').first()
+            nrosol_num = (ultima_solicitud.nrosol + 1) if ultima_solicitud else 1
+            
+            # Calcular fecha de visita (7 días después)
+            from datetime import timedelta
+            fecha_visita = date.today() + timedelta(days=7)
+            
+            # Determinar el tipo de servicio basado en el producto
+            if producto.nomprod.lower() in ['aire acondicionado', 'ac', 'climatizador', 'split']:
+                tipo_servicio = 'Instalación'
+                descripcion = f'Instalación de {producto.nomprod}'
+            else:
+                tipo_servicio = 'Mantención'
+                descripcion = f'Mantención de {producto.nomprod}'
+            
+            solicitud = SolicitudServicio.objects.create(
+                nrosol=nrosol_num,
+                nrofac=factura,
+                tiposol=tipo_servicio,
+                fechavisita=fecha_visita,
+                ruttec=tecnico,
+                descsol=descripcion,
+                estadosol='Pendiente',
+                guia=guia_despacho  # Vincular a la guía de despacho
+            )
+            print(solicitud)
+            logger.info(f"Solicitud de servicio automática creada: {solicitud.nrosol} - Tipo: {tipo_servicio} - Vinculada a guía: {guia_despacho.nrogd}")
+            solicitud_creada = True
+        else:
+            logger.warning("No se encontró técnico disponible para crear solicitud de servicio")
+        
+        logger.info("=== COMPRA GUARDADA EXITOSAMENTE ===")
+        
+        return {
+            'success': True,
+            'factura': factura,
+            'guia_despacho': guia_despacho,
+            'solicitud_creada': solicitud_creada
+        }
+        
+    except Exception as e:
+        logger.error(f"=== ERROR GUARDANDO COMPRA ===")
+        logger.error(f"Error: {str(e)}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return {
+            'success': False,
+            'error': str(e)
+        }
 
 def get_user_cookies(request):
     """
@@ -29,6 +135,17 @@ def get_user_cookies(request):
     }
 
 def home(request):
+    # Verificar estado de la base de datos
+    try:
+        productos_count = Producto.objects.count()
+        facturas_count = Factura.objects.count()
+        guias_count = GuiaDespacho.objects.count()
+        tecnicos_count = PerfilUsuario.objects.filter(tipousu='Técnico').count()
+        
+        logger.info(f"Estado BD - Productos: {productos_count}, Facturas: {facturas_count}, Guías: {guias_count}, Técnicos: {tecnicos_count}")
+    except Exception as e:
+        logger.error(f"Error verificando BD: {str(e)}")
+    
     return render(request, "core/home.html")
 
 @csrf_exempt
@@ -200,10 +317,22 @@ def iniciar_pago(request, id):
     # Como esta tienda no maneja, en realidad no tiene el concepto de "orden de compra"
     # pero se indica igual
     print("Webpay Plus Transaction.create")
+    
+    # Obtener información del producto
+    producto = Producto.objects.get(idprod=id)
+    
     buy_order = str(random.randrange(1000000, 99999999))
     session_id = request.user.username
-    amount = Producto.objects.get(idprod=id).precio
+    amount = producto.precio
     return_url = request.build_absolute_uri('/pago_exitoso/')
+
+    # Guardar información del producto en la sesión para procesarlo después del pago
+    request.session['compra_producto_id'] = id
+    request.session['compra_producto_nombre'] = producto.nomprod
+    request.session['compra_producto_precio'] = amount
+    request.session['compra_buy_order'] = buy_order
+    
+    logger.info(f"Compra iniciada - Producto: {producto.nomprod}, ID: {id}, Precio: {amount}")
 
     # response = Transaction.create(buy_order, session_id, amount, return_url)
     commercecode = "597055555532"
@@ -229,6 +358,7 @@ def iniciar_pago(request, id):
         "email": request.user.email,
         "rut": perfil.rut,
         "dirusu": perfil.dirusu,
+        "producto": producto,
     }
 
     return render(request, "core/iniciar_pago.html", context)
@@ -245,51 +375,196 @@ def pago_exitoso(request):
         user = User.objects.get(username=response['session_id'])
         perfil = PerfilUsuario.objects.get(user=user)
 
+        # Log para debuggear
+        logger.info(f"=== DEBUG INFO ===")
+        logger.info(f"Usuario: {user.username}")
+        logger.info(f"Perfil: {perfil.rut} - {perfil.tipousu}")
+        logger.info(f"Pago exitoso - Response code: {response['response_code']}")
+        logger.info(f"Datos de sesión disponibles: {dict(request.session)}")
+        logger.info(f"¿Existe servicio_tipo_solicitud?: {request.session.get('servicio_tipo_solicitud')}")
+        logger.info(f"¿Existe compra_producto_id?: {request.session.get('compra_producto_id')}")
+        logger.info(f"Productos en BD: {Producto.objects.count()}")
+        logger.info(f"Facturas en BD: {Factura.objects.count()}")
+        logger.info(f"Guias en BD: {GuiaDespacho.objects.count()}")
+        logger.info(f"Técnicos en BD: {PerfilUsuario.objects.filter(tipousu='Técnico').count()}")
+        logger.info(f"=== FIN DEBUG INFO ===")
+
+        # Variables para rastrear el procesamiento
+        servicio_procesado = False
+        compra_procesada = False
+        
+        # --- FLUJO DE COMPRA DE PRODUCTO ---
+        if response['response_code'] == 0 and request.session.get('compra_producto_id'):
+            logger.info("=== INICIANDO FLUJO DE COMPRA ===")
+            try:
+                producto_id = request.session.get('compra_producto_id')
+                producto_nombre = request.session.get('compra_producto_nombre')
+                producto_precio = request.session.get('compra_producto_precio')
+                buy_order = request.session.get('compra_buy_order')
+                
+                logger.info(f"Procesando compra de producto - ID: {producto_id}, Nombre: {producto_nombre}, Precio: {producto_precio}")
+                logger.info(f"Tipo de producto_id: {type(producto_id)}")
+                logger.info(f"Tipo de producto_precio: {type(producto_precio)}")
+                
+                # Obtener el producto
+                producto = Producto.objects.get(idprod=producto_id)
+                logger.info(f"Producto obtenido: {producto.nomprod} (ID: {producto.idprod})")
+                
+                # 1. Crear la factura
+                from datetime import date
+                
+                # Generar un número de factura único
+                ultima_factura = Factura.objects.order_by('-nrofac').first()
+                nrofac_num = (ultima_factura.nrofac + 1) if ultima_factura else 1
+                logger.info(f"Generando número de factura: {nrofac_num} (última factura: {ultima_factura.nrofac if ultima_factura else 'Ninguna'})")
+                
+                # Crear la factura
+                logger.info("Intentando crear factura...")
+                factura = Factura.objects.create(
+                    nrofac=nrofac_num,
+                    rutcli=perfil,
+                    idprod=producto,
+                    fechafac=date.today(),
+                    descfac=f'Compra de {producto.nomprod}',
+                    monto=producto_precio
+                )
+                logger.info(f"Factura creada exitosamente con número: {nrofac_num}")
+                
+                # 2. Crear la guía de despacho
+                ultima_guia = GuiaDespacho.objects.order_by('-nrogd').first()
+                nrogd_num = (ultima_guia.nrogd + 1) if ultima_guia else 1
+                logger.info(f"Generando número de guía de despacho: {nrogd_num} (última guía: {ultima_guia.nrogd if ultima_guia else 'Ninguna'})")
+                
+                guia_despacho = GuiaDespacho.objects.create(
+                    nrogd=nrogd_num,
+                    nrofac=factura,
+                    idprod=producto,
+                    estadogd='En bodega'
+                )
+                logger.info(f"Guía de despacho creada exitosamente con número: {nrogd_num}")
+                
+                # 3. Crear solicitud de servicio automática si el producto requiere instalación
+                if producto.nomprod.lower() in ['aire acondicionado', 'ac', 'climatizador', 'split']:
+                    # Buscar un técnico disponible
+                    tecnico = PerfilUsuario.objects.filter(tipousu='Técnico').first()
+                    
+                    if tecnico:
+                        # Generar un número de solicitud único
+                        ultima_solicitud = SolicitudServicio.objects.order_by('-nrosol').first()
+                        nrosol_num = (ultima_solicitud.nrosol + 1) if ultima_solicitud else 1
+                        
+                        # Calcular fecha de visita (7 días después)
+                        from datetime import timedelta
+                        fecha_visita = date.today() + timedelta(days=7)
+                        
+                        solicitud = SolicitudServicio.objects.create(
+                            nrosol=nrosol_num,
+                            nrofac=factura,
+                            tiposol='Instalación',
+                            fechavisita=fecha_visita,
+                            ruttec=tecnico,
+                            descsol=f'Instalación automática de {producto.nomprod}',
+                            estadosol='Pendiente',
+                            guia=guia_despacho  # Vincular a la guía de despacho
+                        )
+                        logger.info(f"Solicitud de servicio automática creada con ID: {solicitud.nrosol} - Vinculada a guía: {guia_despacho.nrogd}")
+                
+                # Limpiar datos de sesión de compra
+                for key in ['compra_producto_id', 'compra_producto_nombre', 'compra_producto_precio', 'compra_buy_order']:
+                    if key in request.session:
+                        del request.session[key]
+                
+                logger.info("Datos de sesión de compra limpiados correctamente")
+                compra_procesada = True
+                logger.info("=== FLUJO DE COMPRA COMPLETADO EXITOSAMENTE ===")
+                
+            except Exception as e:
+                logger.error(f"=== ERROR EN FLUJO DE COMPRA ===")
+                logger.error(f"Error al procesar compra de producto: {str(e)}")
+                logger.error(f"Tipo de error: {type(e).__name__}")
+                import traceback
+                logger.error(f"Traceback completo: {traceback.format_exc()}")
+                compra_procesada = False
+        
         # --- FLUJO DE SOLICITUD DE SERVICIO ---
         if response['response_code'] == 0 and request.session.get('servicio_tipo_solicitud'):
-            tipo_solicitud = request.session.get('servicio_tipo_solicitud')
-            descripcion = request.session.get('servicio_descripcion')
-            fecha_visita = request.session.get('servicio_fecha_visita')
-            tecnico_rut = request.session.get('servicio_tecnico_rut')
-            precio = request.session.get('servicio_precio')
+            try:
+                tipo_solicitud = request.session.get('servicio_tipo_solicitud')
+                descripcion = request.session.get('servicio_descripcion')
+                fecha_visita = request.session.get('servicio_fecha_visita')
+                tecnico_rut = request.session.get('servicio_tecnico_rut')
+                precio = request.session.get('servicio_precio')
 
-            tecnico = None
-            if tecnico_rut:
+                logger.info(f"Procesando solicitud de servicio - Tipo: {tipo_solicitud}, Descripción: {descripcion}, Fecha: {fecha_visita}, Precio: {precio}")
+                
+                # Convertir la fecha de string a objeto date
+                from datetime import datetime
                 try:
-                    tecnico = PerfilUsuario.objects.get(rut=tecnico_rut)
-                except PerfilUsuario.DoesNotExist:
-                    tecnico = None
+                    fecha_visita_obj = datetime.strptime(fecha_visita, '%Y-%m-%d').date()
+                    logger.info(f"Fecha convertida correctamente: {fecha_visita_obj}")
+                except Exception as e:
+                    logger.error(f"Error al convertir fecha: {str(e)}")
+                    fecha_visita_obj = date.today()  # Usar fecha actual como fallback
 
-            # 1. Crear la factura usando tu SP
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "EXEC SP_CREAR_FACTURA @rutcli=%s, @idprod=%s, @monto=%s, @descfac=%s",
-                    [perfil.rut, None, precio, 'Solicitud de servicio']
+                tecnico = None
+                if tecnico_rut:
+                    try:
+                        tecnico = PerfilUsuario.objects.get(rut=tecnico_rut)
+                        logger.info(f"Técnico asignado: {tecnico.user.first_name} {tecnico.user.last_name}")
+                    except PerfilUsuario.DoesNotExist:
+                        logger.warning(f"No se encontró técnico con RUT: {tecnico_rut}")
+                        tecnico = None
+
+                # 1. Crear la factura directamente usando Django ORM
+                from datetime import date
+                
+                # Generar un número de factura único
+                ultima_factura = Factura.objects.order_by('-nrofac').first()
+                nrofac_num = (ultima_factura.nrofac + 1) if ultima_factura else 1
+                
+                # Crear la factura
+                factura = Factura.objects.create(
+                    nrofac=nrofac_num,
+                    rutcli=perfil,
+                    idprod=None,  # Para solicitudes de servicio no hay producto específico
+                    fechafac=date.today(),
+                    descfac='Solicitud de servicio',
+                    monto=precio
                 )
-                nrofac_num = cursor.fetchone()[0]  # Recupera el nrofac generado
+                logger.info(f"Factura creada con número: {nrofac_num}")
 
-            # 2. Obtener la instancia de Factura
-            factura = Factura.objects.get(nrofac=nrofac_num)
+                # 3. Crear la solicitud de servicio
+                # Generar un número de solicitud único
+                ultima_solicitud = SolicitudServicio.objects.order_by('-nrosol').first()
+                nrosol_num = (ultima_solicitud.nrosol + 1) if ultima_solicitud else 1
+                
+                solicitud = SolicitudServicio.objects.create(
+                    nrosol=nrosol_num,
+                    nrofac=factura,
+                    tiposol=tipo_solicitud,
+                    fechavisita=fecha_visita_obj,
+                    ruttec=tecnico,
+                    descsol=descripcion,
+                    estadosol='Pendiente'
+                )
+                logger.info(f"Solicitud de servicio creada con ID: {solicitud.nrosol}")
 
-            # 3. Crear la solicitud de servicio
-            SolicitudServicio.objects.create(
-                nrofac=factura,
-                tiposol=tipo_solicitud,
-                fechavisita=fecha_visita,
-                ruttec=tecnico,
-                descsol=descripcion,
-                estadosol='Pendiente'
-            )
+                # Limpia la sesión
+                for key in [
+                    'servicio_tipo_solicitud', 'servicio_descripcion', 'servicio_fecha_visita',
+                    'servicio_tecnico_rut', 'servicio_precio'
+                ]:
+                    if key in request.session:
+                        del request.session[key]
+                
+                logger.info("Datos de sesión limpiados correctamente")
+                servicio_procesado = True
 
-            # Limpia la sesión si quieres
-            for key in [
-                'servicio_tipo_solicitud', 'servicio_descripcion', 'servicio_fecha_visita',
-                'servicio_tecnico_rut', 'servicio_precio'
-            ]:
-                if key in request.session:
-                    del request.session[key]
+            except Exception as e:
+                logger.error(f"Error al procesar solicitud de servicio: {str(e)}")
+                servicio_procesado = False
 
-        # ...tu contexto y render...
+        # Contexto para el template
         context = {
             "buy_order": response['buy_order'],
             "session_id": response['session_id'],
@@ -301,7 +576,10 @@ def pago_exitoso(request):
             "email": user.email,
             "rut": perfil.rut,
             "dirusu": perfil.dirusu,
-            "response_code": response['response_code']
+            "response_code": response['response_code'],
+            "pago_exitoso": response['response_code'] == 0,
+            "servicio_procesado": servicio_procesado,
+            "compra_procesada": compra_procesada
         }
 
         return render(request, "core/pago_exitoso.html", context)
@@ -674,7 +952,8 @@ def obtener_solicitudes_de_servicio(request):
             'nomcli': f"{sol.nrofac.rutcli.user.first_name} {sol.nrofac.rutcli.user.last_name}",
             'tiposol': sol.tiposol,
             'fechavisita': sol.fechavisita,
-            'nomtec': f"{sol.ruttec.user.first_name} {sol.ruttec.user.last_name}",
+            'nomtec': f"{sol.ruttec.user.first_name} {sol.ruttec.user.last_name}" if sol.ruttec else 'Sin asignar',
+            'ruttec': sol.ruttec.rut if sol.ruttec else None,
             'descser': sol.descsol,  # <--- aquí está el nombre correcto
             'estadosol': sol.estadosol,
         })
@@ -692,12 +971,28 @@ def aceptar_solicitud(request, nrosol):
 @login_required
 def modificar_solicitud(request, nrosol):
     solicitud = SolicitudServicio.objects.get(nrosol=nrosol)
+    user_perfil = request.user.perfilusuario
+
     if request.method == 'POST':
+        accion = request.POST.get('accion')
         nueva_fecha = request.POST.get('fechavisita')
+
+        # Modificar fecha (opcional)
         if nueva_fecha:
             solicitud.fechavisita = nueva_fecha
-            solicitud.estadosol = 'Modificado'
-            solicitud.save()
+            solicitud.estadosol = 'Modificada'
+
+        # Aceptar solicitud
+        if accion == 'aceptar' and solicitud.ruttec is None and user_perfil.tipousu == 'Técnico':
+            solicitud.ruttec = user_perfil
+            solicitud.estadosol = 'Aceptada'
+
+        # Soltar solicitud
+        elif accion == 'soltar' and solicitud.ruttec == user_perfil and user_perfil.tipousu == 'Técnico':
+            solicitud.ruttec = None
+            solicitud.estadosol = 'Pendiente'
+
+        solicitud.save()
     return redirect('obtener_solicitudes_de_servicio')
 
 @login_required
@@ -733,18 +1028,27 @@ def ingresar_solicitud_servicio(request):
         tipo_solicitud = request.POST.get('tipo_solicitud')
         descripcion = request.POST.get('descripcion')
         fecha_visita = request.POST.get('fecha_visita')
-        print(f"Tipo de solicitud: {tipo_solicitud}, Descripción: {descripcion}, Fecha: {fecha_visita}")
+        
+        logger.info(f"Recibiendo solicitud de servicio - Tipo: {tipo_solicitud}, Descripción: {descripcion}, Fecha: {fecha_visita}")
+        
         # Guardar datos en sesión para usarlos después del pago
         tecnico = PerfilUsuario.objects.filter(tipousu='Técnico').first()
-        # perfil_cliente = PerfilUsuario.objects.get(user=user)
+        
+        # Guardar datos en sesión
         request.session['servicio_tipo_solicitud'] = tipo_solicitud
         request.session['servicio_descripcion'] = descripcion
         request.session['servicio_fecha_visita'] = fecha_visita
         request.session['servicio_precio'] = PRECIO_SERVICIO
+        
         if tecnico:
             request.session['servicio_tecnico_rut'] = tecnico.rut
+            logger.info(f"Técnico asignado: {tecnico.user.first_name} {tecnico.user.last_name} (RUT: {tecnico.rut})")
         else:
-            request.session['servicio_tecnico_rut'] = None  # O maneja el caso sin técnico
+            request.session['servicio_tecnico_rut'] = None
+            logger.warning("No se encontró técnico disponible")
+        
+        # Verificar que los datos se guardaron correctamente en la sesión
+        logger.info(f"Datos guardados en sesión: {dict(request.session)}")
 
         # Iniciar pago Webpay
         buy_order = str(random.randrange(1000000, 99999999))
@@ -779,4 +1083,46 @@ def ingresar_solicitud_servicio(request):
     'core/ingresar_solicitud_servicio.html',
     {'precio_servicio': 25000, 'active_page': 'ingresar_solicitud_servicio'}
 )
+
+@login_required
+def probar_compra_directa(request, producto_id):
+    """
+    Vista para probar el guardado de compra directamente en la BD
+    sin pasar por WebPay. Solo para testing/debugging.
+    """
+    try:
+        # Obtener el perfil del usuario
+        perfil = PerfilUsuario.objects.get(user=request.user)
+        
+        # Llamar a la función auxiliar
+        resultado = guardar_compra_en_bd(producto_id, perfil)
+        
+        if resultado['success']:
+            context = {
+                'mensaje': 'Compra guardada exitosamente',
+                'factura': resultado['factura'],
+                'guia_despacho': resultado['guia_despacho'],
+                'solicitud_creada': resultado['solicitud_creada'],
+                'success': True
+            }
+            
+            # Si se creó una solicitud, agregar sus detalles al contexto
+            if resultado['solicitud_creada']:
+                # Buscar la solicitud creada para esta factura
+                solicitud = SolicitudServicio.objects.filter(nrofac=resultado['factura']).first()
+                if solicitud:
+                    context['solicitud'] = solicitud
+        else:
+            context = {
+                'mensaje': f'Error al guardar compra: {resultado["error"]}',
+                'success': False
+            }
+            
+    except Exception as e:
+        context = {
+            'mensaje': f'Error: {str(e)}',
+            'success': False
+        }
+    
+    return render(request, "core/resultado_compra.html", context)
     
