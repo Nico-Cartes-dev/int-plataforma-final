@@ -1,0 +1,136 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block stylesheet %}
+    <link href="{% static 'core/css/home.css'%}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center mb-4">
+        <h1 style="color: blue !important; font-weight: bolder;">
+            Dashboard de Gestión de Técnicos
+        </h1>
+    </div>
+
+    <!-- Estadísticas Generales -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Solicitudes</h5>
+                    <h2 class="text-primary">{{ total_solicitudes }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Pendientes</h5>
+                    <h2 class="text-warning">{{ solicitudes_pendientes }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Activas</h5>
+                    <h2 class="text-info">{{ solicitudes_activas }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Completadas</h5>
+                    <h2 class="text-success">{{ solicitudes_completadas }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Técnicos -->
+    <div class="card">
+        <div class="card-header">
+            <h4>Estadísticas por Técnico</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Técnico</th>
+                        <th>RUT</th>
+                        <th>Total Asignadas</th>
+                        <th>Activas</th>
+                        <th>Completadas</th>
+                        <th>Carga Actual</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in tecnicos_stats %}
+                    <tr>
+                        <td>{{ stat.nombre }}</td>
+                        <td>{{ stat.rut }}</td>
+                        <td>{{ stat.total_asignadas }}</td>
+                        <td>{{ stat.activas }}</td>
+                        <td>{{ stat.completadas }}</td>
+                        <td>
+                            <span class="badge {% if stat.carga_actual == 0 %}bg-success{% elif stat.carga_actual <= 2 %}bg-warning{% else %}bg-danger{% endif %}">
+                                {{ stat.carga_actual }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if stat.carga_actual == 0 %}
+                                <span class="text-success">Disponible</span>
+                            {% elif stat.carga_actual <= 2 %}
+                                <span class="text-warning">Moderada</span>
+                            {% else %}
+                                <span class="text-danger">Sobrecargado</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Información del Sistema -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Información del Sistema</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><strong>Asignación Automática:</strong> El sistema asigna automáticamente técnicos basándose en la carga de trabajo.</li>
+                        <li><strong>Prioridad:</strong> Se asigna al técnico con menos solicitudes activas.</li>
+                        <li><strong>Estados:</strong> 
+                            <ul>
+                                <li><span class="text-success">Disponible (0 solicitudes)</span></li>
+                                <li><span class="text-warning">Moderada (1-2 solicitudes)</span></li>
+                                <li><span class="text-danger">Sobrecargado (3+ solicitudes)</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Acciones Disponibles</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'obtener_solicitudes_de_servicio' %}" class="btn btn-primary btn-sm">Gestionar Solicitudes</a></li>
+                        <li class="mt-2"><a href="{% url 'home' %}" class="btn btn-secondary btn-sm">Volver al Inicio</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %} 

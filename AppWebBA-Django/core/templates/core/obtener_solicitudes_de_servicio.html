@@ -8,7 +8,13 @@
 {% block content %}
 <div class="text-center">
     <h1 style="color: blue !important; font-weight: bolder;">
-        Mis Solicitudes de Servicio <br>
+        {% if user.perfilusuario.tipousu == 'Administrador' %}
+            Gestión de Solicitudes de Servicio
+        {% elif user.perfilusuario.tipousu == 'Técnico' %}
+            Mis Solicitudes de Servicio
+        {% else %}
+            Mis Solicitudes de Servicio
+        {% endif %}
     </h1>
     <table class="table table-hover">
         <thead>
@@ -38,8 +44,8 @@
                         <td>{{ sol.estadosol }}</td>
                         {% if user.perfilusuario.tipousu != 'Cliente' %}
                         <td>
-                            <a href="{% url 'aceptar_solicitud' sol.nrosol %}">Aceptar</a>
-                            <a href="#" class="btn-modificar"
+                          {% if user.perfilusuario.tipousu == 'Administrador' %}
+                            <a href="#" class="btn btn-primary btn-sm btn-modificar"
                                data-bs-toggle="modal"
                                data-bs-target="#modalModificar"
                                data-nrosol="{{ sol.nrosol }}"
@@ -49,10 +55,47 @@
                                data-usuario="{{ user.perfilusuario.rut }}"
                                data-nomtec="{{ sol.nomtec }}"
                                data-tipousu="{{ user.perfilusuario.tipousu }}"
-                               >
-                               Modificar
-                            </a>
-                            <a href="{% url 'cerrar_solicitud' sol.nrosol %}">Cerrar</a>
+                               >Modificar</a>
+                            <a href="{% url 'cerrar_solicitud' sol.nrosol %}" class="btn btn-danger btn-sm">Cerrar</a>
+                          {% elif user.perfilusuario.tipousu == 'Técnico' %}
+                            {% if sol.estadosol == 'Pendiente' and not sol.ruttec %}
+                              <a href="#" class="btn btn-success btn-sm btn-modificar"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#modalModificar"
+                                 data-nrosol="{{ sol.nrosol }}"
+                                 data-fechavisita="{{ sol.fechavisita|date:'Y-m-d' }}"
+                                 data-ruttec="{{ sol.ruttec }}"
+                                 data-estadosol="{{ sol.estadosol }}"
+                                 data-usuario="{{ user.perfilusuario.rut }}"
+                                 data-nomtec="{{ sol.nomtec }}"
+                                 data-tipousu="{{ user.perfilusuario.tipousu }}"
+                                 >Aceptar</a>
+                            {% elif sol.ruttec == user.perfilusuario.rut %}
+                              <a href="#" class="btn btn-warning btn-sm btn-modificar"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#modalModificar"
+                                 data-nrosol="{{ sol.nrosol }}"
+                                 data-fechavisita="{{ sol.fechavisita|date:'Y-m-d' }}"
+                                 data-ruttec="{{ sol.ruttec }}"
+                                 data-estadosol="{{ sol.estadosol }}"
+                                 data-usuario="{{ user.perfilusuario.rut }}"
+                                 data-nomtec="{{ sol.nomtec }}"
+                                 data-tipousu="{{ user.perfilusuario.tipousu }}"
+                                 >Soltar</a>
+                            {% endif %}
+                            <a href="#" class="btn btn-primary btn-sm btn-modificar"
+                               data-bs-toggle="modal"
+                               data-bs-target="#modalModificar"
+                               data-nrosol="{{ sol.nrosol }}"
+                               data-fechavisita="{{ sol.fechavisita|date:'Y-m-d' }}"
+                               data-ruttec="{{ sol.ruttec }}"
+                               data-estadosol="{{ sol.estadosol }}"
+                               data-usuario="{{ user.perfilusuario.rut }}"
+                               data-nomtec="{{ sol.nomtec }}"
+                               data-tipousu="{{ user.perfilusuario.tipousu }}"
+                               >Modificar</a>
+                            <a href="{% url 'cerrar_solicitud' sol.nrosol %}" class="btn btn-danger btn-sm">Cerrar</a>
+                          {% endif %}
                         </td>
                         {% endif %}
                     </tr>
@@ -69,7 +112,7 @@
       {% csrf_token %}
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalModificarLabel">Modificar Solicitud de Servicio</h5>
+          <h5 class="modal-title" id="modalModificarLabel">Gestionar Solicitud de Servicio</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
@@ -78,11 +121,28 @@
             <label for="modal-fechavisita" class="form-label">Fecha de la visita</label>
             <input type="date" class="form-control" name="fechavisita" id="modal-fechavisita" required>
           </div>
+          
+          <!-- Selector de técnico para administradores -->
+          {% if es_admin %}
+          <div class="mb-3">
+            <label for="modal-tecnico" class="form-label">Asignar Técnico</label>
+            <select class="form-control" name="tecnico_asignar" id="modal-tecnico">
+              <option value="">Sin asignar</option>
+              {% for tecnico in tecnicos %}
+                <option value="{{ tecnico.rut }}">{{ tecnico.user__first_name }} {{ tecnico.user__last_name }} ({{ tecnico.rut }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% endif %}
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary" name="accion" value="modificar">Modificar Fecha</button>
-          <button type="submit" class="btn btn-success d-none" id="btn-aceptar" name="accion" value="aceptar">Aceptar Solicitud</button>
-          <button type="submit" class="btn btn-warning d-none" id="btn-soltar" name="accion" value="soltar">Soltar Solicitud</button>
+          {% if es_admin %}
+            <button type="submit" class="btn btn-info" name="accion" value="asignar_tecnico">Asignar Técnico</button>
+          {% else %}
+            <button type="submit" class="btn btn-success d-none" id="btn-aceptar" name="accion" value="aceptar">Aceptar Solicitud</button>
+            <button type="submit" class="btn btn-warning d-none" id="btn-soltar" name="accion" value="soltar">Soltar Solicitud</button>
+          {% endif %}
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         </div>
       </div>
@@ -97,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var fechaInput = document.getElementById('modal-fechavisita');
     var btnAceptar = document.getElementById('btn-aceptar');
     var btnSoltar = document.getElementById('btn-soltar');
+    var tecnicoSelect = document.getElementById('modal-tecnico');
 
     document.querySelectorAll('.btn-modificar').forEach(function(btn) {
         btn.addEventListener('click', function() {
@@ -111,18 +172,29 @@ document.addEventListener('DOMContentLoaded', function() {
             fechaInput.value = fecha;
             form.action = "{% url 'modificar_solicitud' 0 %}".replace('/0/', '/' + nrosol.replace(/\s/g, '') + '/');
 
-            // Lógica para mostrar/ocultar botones
-            btnAceptar.classList.add('d-none');
-            btnSoltar.classList.add('d-none');
-            
-            if (tipousu === 'Técnico') {
-                // Si no hay técnico asignado (ruttec es null o vacío), mostrar botón aceptar
-                if (!ruttec || ruttec === 'None' || ruttec === '') {
-                    btnAceptar.classList.remove('d-none');
+            // Si es administrador, configurar el selector de técnico
+            if (tipousu === 'Administrador' && tecnicoSelect) {
+                if (ruttec && ruttec !== 'None' && ruttec !== '') {
+                    tecnicoSelect.value = ruttec;
+                } else {
+                    tecnicoSelect.value = '';
                 }
-                // Si el técnico asignado es el usuario actual, mostrar botón soltar
-                else if (ruttec === usuario) {
-                    btnSoltar.classList.remove('d-none');
+            }
+
+            // Lógica para mostrar/ocultar botones (solo para técnicos)
+            if (btnAceptar && btnSoltar) {
+                btnAceptar.classList.add('d-none');
+                btnSoltar.classList.add('d-none');
+                
+                if (tipousu === 'Técnico') {
+                    // Si no hay técnico asignado (ruttec es null o vacío), mostrar botón aceptar
+                    if (!ruttec || ruttec === 'None' || ruttec === '') {
+                        btnAceptar.classList.remove('d-none');
+                    }
+                    // Si el técnico asignado es el usuario actual, mostrar botón soltar
+                    else if (ruttec === usuario) {
+                        btnSoltar.classList.remove('d-none');
+                    }
                 }
             }
         });

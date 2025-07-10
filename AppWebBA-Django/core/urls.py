@@ -9,7 +9,8 @@ from .views import (
     registrar_usuario, cerrar_sesion, perfil_usuario, iniciar_pago,
     pago_exitoso, obtener_solicitudes_de_servicio, mis_compras,
      facturas, ingresar_solicitud_servicio, aceptar_solicitud,
-    modificar_solicitud, cerrar_solicitud, probar_compra_directa
+    modificar_solicitud, cerrar_solicitud, probar_compra_directa,
+    dashboard_tecnicos
 )
 
 urlpatterns = [
@@ -58,6 +59,7 @@ urlpatterns = [
     
     # Administrador views
     path('facturas/', facturas, name='facturas'),  # For admin to see all invoices
+    path('dashboard-tecnicos/', dashboard_tecnicos, name='dashboard_tecnicos'),  # Dashboard de gestión de técnicos
     
     path('ingresar_solicitud_servicio/', ingresar_solicitud_servicio, name='ingresar_solicitud_servicio'),
     

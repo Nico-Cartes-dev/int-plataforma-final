@@ -17,6 +17,41 @@ import requests
 from .utils import get_exchange_clp_usd
 import logging
 
+def asignar_tecnico_automaticamente():
+    """
+    Función auxiliar para asignar un técnico automáticamente a una solicitud.
+    Implementa una lógica simple de round-robin para distribuir la carga.
+    """
+    try:
+        # Obtener todos los técnicos disponibles
+        tecnicos = PerfilUsuario.objects.filter(tipousu='Técnico')
+        
+        if not tecnicos.exists():
+            logger.warning("No hay técnicos disponibles para asignación automática")
+            return None
+        
+        # Obtener el técnico con menos solicitudes activas
+        tecnico_menos_cargado = None
+        menor_carga = float('inf')
+        
+        for tecnico in tecnicos:
+            # Contar solicitudes activas del técnico (Aceptada, Asignada, Modificada)
+            solicitudes_activas = SolicitudServicio.objects.filter(
+                ruttec=tecnico,
+                estadosol__in=['Aceptada', 'Asignada', 'Modificada']
+            ).count()
+            
+            if solicitudes_activas < menor_carga:
+                menor_carga = solicitudes_activas
+                tecnico_menos_cargado = tecnico
+        
+        logger.info(f"Técnico asignado automáticamente: {tecnico_menos_cargado.user.first_name} {tecnico_menos_cargado.user.last_name} (RUT: {tecnico_menos_cargado.rut}) - Carga actual: {menor_carga}")
+        return tecnico_menos_cargado
+        
+    except Exception as e:
+        logger.error(f"Error en asignación automática de técnico: {str(e)}")
+        return None
+
 def guardar_compra_en_bd(producto_id, perfil_cliente, precio=None):
     """
     Función auxiliar para guardar una compra directamente en la base de datos
@@ -68,8 +103,8 @@ def guardar_compra_en_bd(producto_id, perfil_cliente, precio=None):
         
         # 3. Crear solicitud de servicio automática para TODA compra
         solicitud_creada = False
-        # Buscar un técnico disponible
-        tecnico = PerfilUsuario.objects.filter(tipousu='Técnico').first()
+        # Asignar técnico automáticamente usando la nueva función
+        tecnico = asignar_tecnico_automaticamente()
         
         if tecnico:
             # Generar un número de solicitud único
@@ -445,8 +480,8 @@ def pago_exitoso(request):
                 
                 # 3. Crear solicitud de servicio automática si el producto requiere instalación
                 if producto.nomprod.lower() in ['aire acondicionado', 'ac', 'climatizador', 'split']:
-                    # Buscar un técnico disponible
-                    tecnico = PerfilUsuario.objects.filter(tipousu='Técnico').first()
+                    # Asignar técnico automáticamente usando la nueva función
+                    tecnico = asignar_tecnico_automaticamente()
                     
                     if tecnico:
                         # Generar un número de solicitud único
@@ -934,8 +969,10 @@ def mis_compras(request):
 @login_required
 def obtener_solicitudes_de_servicio(request):
     if request.user.perfilusuario.tipousu == 'Técnico':
-        # Mostrar solo solicitudes asignadas al técnico
-        solicitudes = SolicitudServicio.objects.filter(ruttec=request.user.perfilusuario)
+        # Mostrar solicitudes asignadas al técnico Y solicitudes pendientes sin asignar
+        solicitudes_asignadas = SolicitudServicio.objects.filter(ruttec=request.user.perfilusuario)
+        solicitudes_pendientes = SolicitudServicio.objects.filter(ruttec__isnull=True, estadosol='Pendiente')
+        solicitudes = solicitudes_asignadas | solicitudes_pendientes
     elif request.user.perfilusuario.tipousu == 'Administrador':
         # Mostrar todas las solicitudes
         solicitudes = SolicitudServicio.objects.all()
@@ -954,12 +991,22 @@ def obtener_solicitudes_de_servicio(request):
             'fechavisita': sol.fechavisita,
             'nomtec': f"{sol.ruttec.user.first_name} {sol.ruttec.user.last_name}" if sol.ruttec else 'Sin asignar',
             'ruttec': sol.ruttec.rut if sol.ruttec else None,
-            'descser': sol.descsol,  # <--- aquí está el nombre correcto
+            'descser': sol.descsol,
             'estadosol': sol.estadosol,
         })
     
+    # Obtener lista de técnicos para el administrador
+    tecnicos = []
+    if request.user.perfilusuario.tipousu == 'Administrador':
+        tecnicos = PerfilUsuario.objects.filter(tipousu='Técnico').values('rut', 'user__first_name', 'user__last_name')
+    
     return render(request, 'core/obtener_solicitudes_de_servicio.html',
-    {'lista': lista, 'active_page': 'obtener_solicitudes_de_servicio'}
+    {
+        'lista': lista, 
+        'active_page': 'obtener_solicitudes_de_servicio',
+        'tecnicos': tecnicos,
+        'es_admin': request.user.perfilusuario.tipousu == 'Administrador'
+    }
 )
 @login_required
 def aceptar_solicitud(request, nrosol):
@@ -976,23 +1023,38 @@ def modificar_solicitud(request, nrosol):
     if request.method == 'POST':
         accion = request.POST.get('accion')
         nueva_fecha = request.POST.get('fechavisita')
+        tecnico_asignar = request.POST.get('tecnico_asignar')  # Para administradores
 
         # Modificar fecha (opcional)
         if nueva_fecha:
             solicitud.fechavisita = nueva_fecha
-            solicitud.estadosol = 'Modificada'
+            if solicitud.estadosol != 'Aceptada':
+                solicitud.estadosol = 'Modificada'
 
-        # Aceptar solicitud
-        if accion == 'aceptar' and solicitud.ruttec is None and user_perfil.tipousu == 'Técnico':
+        # Lógica para administradores - asignar técnico manualmente
+        if accion == 'asignar_tecnico' and user_perfil.tipousu == 'Administrador' and tecnico_asignar:
+            try:
+                tecnico = PerfilUsuario.objects.get(rut=tecnico_asignar, tipousu='Técnico')
+                solicitud.ruttec = tecnico
+                solicitud.estadosol = 'Asignada'
+                logger.info(f"Administrador {user_perfil.rut} asignó técnico {tecnico.rut} a solicitud {nrosol}")
+            except PerfilUsuario.DoesNotExist:
+                logger.error(f"Técnico con RUT {tecnico_asignar} no encontrado")
+
+        # Lógica para técnicos - aceptar solicitud
+        elif accion == 'aceptar' and solicitud.ruttec is None and user_perfil.tipousu == 'Técnico':
             solicitud.ruttec = user_perfil
             solicitud.estadosol = 'Aceptada'
+            logger.info(f"Técnico {user_perfil.rut} aceptó solicitud {nrosol}")
 
-        # Soltar solicitud
+        # Lógica para técnicos - soltar solicitud
         elif accion == 'soltar' and solicitud.ruttec == user_perfil and user_perfil.tipousu == 'Técnico':
             solicitud.ruttec = None
             solicitud.estadosol = 'Pendiente'
+            logger.info(f"Técnico {user_perfil.rut} soltó solicitud {nrosol}")
 
         solicitud.save()
+        
     return redirect('obtener_solicitudes_de_servicio')
 
 @login_required
@@ -1032,7 +1094,7 @@ def ingresar_solicitud_servicio(request):
         logger.info(f"Recibiendo solicitud de servicio - Tipo: {tipo_solicitud}, Descripción: {descripcion}, Fecha: {fecha_visita}")
         
         # Guardar datos en sesión para usarlos después del pago
-        tecnico = PerfilUsuario.objects.filter(tipousu='Técnico').first()
+        tecnico = asignar_tecnico_automaticamente()
         
         # Guardar datos en sesión
         request.session['servicio_tipo_solicitud'] = tipo_solicitud
@@ -1042,10 +1104,10 @@ def ingresar_solicitud_servicio(request):
         
         if tecnico:
             request.session['servicio_tecnico_rut'] = tecnico.rut
-            logger.info(f"Técnico asignado: {tecnico.user.first_name} {tecnico.user.last_name} (RUT: {tecnico.rut})")
+            logger.info(f"Técnico asignado automáticamente: {tecnico.user.first_name} {tecnico.user.last_name} (RUT: {tecnico.rut})")
         else:
             request.session['servicio_tecnico_rut'] = None
-            logger.warning("No se encontró técnico disponible")
+            logger.warning("No se encontró técnico disponible para asignación automática")
         
         # Verificar que los datos se guardaron correctamente en la sesión
         logger.info(f"Datos guardados en sesión: {dict(request.session)}")
@@ -1083,6 +1145,59 @@ def ingresar_solicitud_servicio(request):
     'core/ingresar_solicitud_servicio.html',
     {'precio_servicio': 25000, 'active_page': 'ingresar_solicitud_servicio'}
 )
+
+@login_required
+def dashboard_tecnicos(request):
+    """
+    Dashboard para administradores con estadísticas de asignación de técnicos
+    """
+    if request.user.perfilusuario.tipousu != 'Administrador':
+        return redirect('home')
+    
+    # Obtener estadísticas de técnicos
+    tecnicos_stats = []
+    tecnicos = PerfilUsuario.objects.filter(tipousu='Técnico')
+    
+    for tecnico in tecnicos:
+        solicitudes_asignadas = SolicitudServicio.objects.filter(ruttec=tecnico).count()
+        solicitudes_activas = SolicitudServicio.objects.filter(
+            ruttec=tecnico,
+            estadosol__in=['Aceptada', 'Asignada', 'Modificada']
+        ).count()
+        solicitudes_completadas = SolicitudServicio.objects.filter(
+            ruttec=tecnico,
+            estadosol='Cerrado'
+        ).count()
+        
+        tecnicos_stats.append({
+            'tecnico': tecnico,
+            'nombre': f"{tecnico.user.first_name} {tecnico.user.last_name}",
+            'rut': tecnico.rut,
+            'total_asignadas': solicitudes_asignadas,
+            'activas': solicitudes_activas,
+            'completadas': solicitudes_completadas,
+            'carga_actual': solicitudes_activas
+        })
+    
+    # Ordenar por carga actual (menor a mayor)
+    tecnicos_stats.sort(key=lambda x: x['carga_actual'])
+    
+    # Estadísticas generales
+    total_solicitudes = SolicitudServicio.objects.count()
+    solicitudes_pendientes = SolicitudServicio.objects.filter(ruttec__isnull=True, estadosol='Pendiente').count()
+    solicitudes_activas = SolicitudServicio.objects.filter(estadosol__in=['Aceptada', 'Asignada', 'Modificada']).count()
+    solicitudes_completadas = SolicitudServicio.objects.filter(estadosol='Cerrado').count()
+    
+    context = {
+        'tecnicos_stats': tecnicos_stats,
+        'total_solicitudes': total_solicitudes,
+        'solicitudes_pendientes': solicitudes_pendientes,
+        'solicitudes_activas': solicitudes_activas,
+        'solicitudes_completadas': solicitudes_completadas,
+        'active_page': 'dashboard_tecnicos'
+    }
+    
+    return render(request, 'core/dashboard_tecnicos.html', context)
 
 @login_required
 def probar_compra_directa(request, producto_id):

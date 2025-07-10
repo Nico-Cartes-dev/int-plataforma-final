@@ -106,6 +106,11 @@
               <a class="nav-link{% if active_page == 'obtener_solicitudes_de_servicio' %} active{% endif %}"
                  href="{% url 'obtener_solicitudes_de_servicio' %}">Solicitudes Servicio</a>
             </li>
+          {% elif user.perfilusuario.tipousu == 'Administrador' %}
+            <li class="nav-item">
+              <a class="nav-link{% if active_page == 'dashboard_tecnicos' %} active{% endif %}"
+                 href="{% url 'dashboard_tecnicos' %}">Dashboard Técnicos</a>
+            </li>
           {% endif %}
 
           {# 7. Mis Datos #}
